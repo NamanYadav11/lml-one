@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LML One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --tone:#FCF8ED; --tone2:#F0F2E9; --ink:#000000; --inv:#FFFFFF; --rule:#A3A3A3; --edge:transparent;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#000000;--tone:#161616;--tone2:#262626;--ink:#FFFFFF;--inv:#000000;--rule:#626262;--edge:#626262;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#000000;--tone:#161616;--tone2:#262626;--ink:#FFFFFF;--inv:#000000;--rule:#626262;--edge:#626262;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.3;letter-spacing:-0.01em;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+body.lock{overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left;letter-spacing:inherit;padding:0}
+input,textarea{font:inherit;color:var(--ink);letter-spacing:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.app{max-width:460px;margin:0 auto;padding-bottom:100px;background:var(--bg);min-height:calc(100vh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+@media (min-width:560px){body{background:var(--tone2)}.app{box-shadow:0 0 0 1px var(--rule)}}
+
+/* icons and the Foundation shape */
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.fnd{width:22px;height:22px;flex:none}
+.fnd.solid{fill:var(--ink)}
+.fnd.line{fill:none;stroke:var(--ink);stroke-width:1.4}
+.fnd.half{fill:var(--tone2);stroke:var(--ink);stroke-width:2.4}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);display:flex;align-items:center;gap:6px;height:60px;padding:0 10px 0 16px}
+.brand{display:flex;align-items:center;flex:1;padding-left:4px;color:var(--ink)}
+.logo{display:block;height:20px;width:auto;fill:currentColor}
+.lockup{display:block;height:64px;width:auto;max-width:100%;fill:currentColor}
+.lk-wrap{padding:6px 0 2px}
+.lm{display:inline-block;height:.72em;width:auto;vertical-align:baseline;fill:currentColor}
+.hero-b>h2{margin:2px 0 6px}
+.lk-wrap .lockup{height:52px}
+.ttl{flex:1;font-size:17px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .back{margin-left:-8px}
+.icon-btn{width:42px;height:42px;display:grid;place-items:center;border-radius:10px;position:relative;flex:none}
+.icon-btn .dot{position:absolute;top:4px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--ink);color:var(--inv);font-size:11px;font-weight:700;display:grid;place-items:center;box-shadow:0 0 0 2px var(--bg)}
+
+/* bottom nav */
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,460px);z-index:25;background:var(--bg);border-top:1px solid var(--tone2);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav-in{display:flex;height:64px}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;font-weight:500;text-align:center}
+.nav button.on{font-weight:700;box-shadow:inset 0 2px 0 var(--ink)}
+.nav button.on .ic{stroke-width:2.2}
+
+/* layout */
+.pad{padding:0 16px;margin-top:24px}
+.pad:first-child{margin-top:8px}
+.eye{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.mt{margin-top:12px}
+.mt0{margin-top:4px;font-size:14px}
+.note{font-size:13px;margin-top:10px}
+.lead{font-size:19px;font-weight:300;font-stretch:106%;letter-spacing:-0.02em;line-height:1.2}
+.h2{font-size:22px;font-weight:600;font-stretch:108%;letter-spacing:-0.02em;margin:2px 0 6px}
+.h3{font-size:17px;font-weight:600;margin:14px 0 6px}
+.num{font-variant-numeric:tabular-nums}
+.big{font-size:clamp(32px,10vw,42px);font-weight:600;font-stretch:118%;letter-spacing:-0.03em;line-height:1.05}
+.big span{font-size:20px;font-weight:300;letter-spacing:-0.01em}
+.hh{font-size:32px;font-weight:300;font-stretch:110%;letter-spacing:-0.02em;line-height:1}
+.hh b{font-weight:700}
+.empty{padding:16px;border:1px dashed var(--rule);border-radius:12px;font-size:14px}
+.svc-h{display:flex;gap:12px;align-items:center}.svc-av{width:52px;height:52px;border-radius:12px;background:var(--ink);color:var(--inv);display:grid;place-items:center;font-weight:700;font-size:20px;flex:none}
+.promise{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.promise div{background:var(--tone);border-radius:12px;padding:12px;font-size:12px;line-height:1.3}.promise b{display:block;font-size:14px;margin-bottom:2px}
+.gw{margin-bottom:8px}.gw-top{display:flex;gap:12px;align-items:flex-start}.gw-av{width:44px;height:44px;border-radius:10px;background:var(--ink);color:var(--inv);display:grid;place-items:center;font-weight:700;font-size:18px;flex:none}
+.gtabs .chips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px 2px}.gtabs .chips::-webkit-scrollbar{display:none}.gtabs .chip{flex:none}
+.callout{background:var(--tone);border-left:3px solid var(--ink);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px;margin-top:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* home */
+.park{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:8px;background:var(--tone);font-size:13px;font-weight:500;max-width:100%}
+.park .ic{width:16px;height:16px}
+.park span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.greet{font-size:28px;font-weight:300;font-stretch:108%;letter-spacing:-0.02em;margin-top:16px;line-height:1.1}
+.greet b{font-weight:700}
+.unit{background:var(--ink);color:var(--inv);padding:58px 20px 20px;clip-path:polygon(0 44px,50% 0,100% 44px,100% 100%,0 100%);border-radius:0 0 16px 16px}
+.unit-top{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--inv) 30%,transparent);margin-bottom:16px}
+.unit-top span:first-child{font-weight:700}
+.unit-l{font-size:14px}
+.unit-n{font-size:clamp(34px,11vw,46px);font-weight:600;font-stretch:120%;letter-spacing:-0.03em;line-height:1.05;margin-top:4px}
+.unit-s{font-size:14px;margin-top:6px}
+.unit-b{display:flex;gap:8px;margin-top:18px}
+.unit-b .btn{flex:1}
+.qa-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.qa{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 4px 12px;border-radius:12px;background:var(--tone);font-size:12px;font-weight:500;text-align:center;line-height:1.2}
+.qa .ic{width:24px;height:24px}
+.buildc{display:block;width:100%}
+.prog{display:flex;gap:6px;margin-bottom:12px}
+.prog .fnd{width:28px;height:28px}
+.buildc b{display:block;font-size:17px;font-weight:600}
+.buildc span{font-size:14px}
+.club-t{display:block;width:100%;background:#000;color:#fff;border-radius:14px;padding:18px;box-shadow:0 0 0 1px var(--edge)}
+.club-t .ct{font-size:22px;font-weight:300;font-stretch:108%;letter-spacing:-0.02em;margin:2px 0 6px}
+.club-t p:last-child{font-size:14px}
+
+/* cards, rows, pills */
+.card{background:var(--tone);border-radius:12px;padding:16px}
+.card.mt{margin-top:16px}
+.row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 0;border-bottom:1px solid var(--tone2);min-height:60px}
+.row-i{width:40px;height:40px;border-radius:10px;background:var(--tone);display:grid;place-items:center;flex:none}
+.row-i .fnd{width:20px;height:20px}
+.row-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.row-t b{font-weight:600;font-size:15px}
+.row-t span{font-size:13px}
+.row-r{display:flex;align-items:center;gap:8px;flex:none}
+.chev{width:18px;height:18px}
+.amt{font-weight:600;font-stretch:112%}
+.pill{display:inline-flex;align-items:center;gap:4px;height:24px;padding:0 9px;border-radius:6px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.done{background:var(--ink);color:var(--inv)}
+.pill.open{box-shadow:inset 0 0 0 1.2px var(--ink)}
+.pill.act{background:var(--tone2);box-shadow:inset 0 0 0 2px var(--ink)}
+.pill.idle{border:1px dashed var(--ink);padding:0 8px}
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-bottom:1px solid var(--tone2);font-size:14px}
+.kv b{text-align:right}
+.kv-inv{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:8px}
+
+/* buttons, chips, fields */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:10px;background:var(--ink);color:var(--inv);font-weight:600;font-size:15px;text-align:center}
+.btn .ic{width:18px;height:18px}
+.btn.inv{background:var(--inv);color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.ghost-inv{background:transparent;color:var(--inv);box-shadow:inset 0 0 0 1.5px var(--inv)}
+.btn.sm{min-height:34px;padding:0 12px;font-size:13px;border-radius:8px}
+.btn.wide{width:100%}
+.btn.wide+.btn.wide{margin-top:10px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.row-b{display:flex;gap:8px}
+.row-b .btn{flex:1}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:38px;padding:0 14px;border-radius:8px;box-shadow:inset 0 0 0 1px var(--rule);font-size:14px;font-weight:500}
+.chip.on{background:var(--ink);color:var(--inv);box-shadow:none}
+.chip:disabled{text-decoration:line-through;opacity:.4;cursor:not-allowed}
+.lbl{font-size:13px;font-weight:600;margin:18px 0 8px}
+.fld{display:block;margin-top:16px}
+.fld>span{display:block;font-size:13px;font-weight:600;margin-bottom:6px}
+.fld input,.fld textarea{width:100%;border:1px solid var(--rule);border-radius:10px;padding:12px;background:var(--bg);font-size:16px;resize:vertical}
+.fld input:focus,.fld textarea:focus{outline:2px solid var(--ink);outline-offset:1px}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--rule);border-radius:10px;padding:0 12px;height:48px}
+.search input{border:0;flex:1;min-width:0;background:transparent;font-size:16px;outline:none}
+.tg{width:48px;height:28px;border-radius:14px;background:var(--tone2);box-shadow:inset 0 0 0 1px var(--rule);position:relative;flex:none}
+.tg span{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--bg);box-shadow:0 0 0 1px var(--rule);transition:transform .18s}
+.tg.on{background:var(--ink);box-shadow:none}
+.tg.on span{transform:translateX(20px);background:var(--inv);box-shadow:none}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--tone2)}
+.toggle-row>span{display:flex;flex-direction:column;gap:3px}
+.toggle-row>span span{font-size:13px}
+.card .toggle-row{margin-top:14px;border-top-color:var(--rule)}
+
+/* hero blocks */
+.hero-b{background:var(--ink);color:var(--inv);border-radius:14px;padding:20px}
+.bar-t{height:8px;border-radius:4px;background:var(--tone2);overflow:hidden;margin-top:10px}
+.bar-t i{display:block;height:100%;background:var(--ink);border-radius:4px}
+.bar-t.inv{background:color-mix(in srgb,var(--inv) 25%,transparent)}
+.bar-t.inv i{background:var(--inv)}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stats3 div{background:var(--tone);border-radius:12px;padding:12px}
+.stats3 b{display:block;font-size:26px;font-weight:600;font-stretch:115%;letter-spacing:-0.02em}
+.stats3 span{font-size:12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{background:var(--tone);border-radius:12px;padding:14px}
+.stat b{display:block;font-size:26px;font-weight:600;font-stretch:115%;letter-spacing:-0.02em}
+.stat span{font-size:13px}
+.sos{display:flex;align-items:center;gap:14px;width:100%;margin-top:12px;padding:16px;border-radius:12px;box-shadow:inset 0 0 0 2px var(--ink)}
+.sos .ic{width:28px;height:28px}
+.sos b{display:block;font-size:16px}
+.sos span span{font-size:13px}
+.notice{display:flex;gap:12px;align-items:flex-start}
+.notice p{font-size:14px;margin-top:3px}
+
+/* milestones */
+.ms{display:flex;gap:14px;padding:10px 0;position:relative}
+.ms .fnd{margin-top:1px}
+.ms::after{content:"";position:absolute;left:10.5px;top:36px;bottom:-8px;width:1px;background:var(--rule)}
+.ms:last-child::after{display:none}
+.ms-t b{display:block;font-weight:600}
+.ms-t span{font-size:13px}
+.upd{padding:14px 0;border-bottom:1px solid var(--tone2)}
+.upd svg{display:block;width:100%;height:auto;background:var(--tone);border-radius:10px;padding:10px;margin-bottom:10px}
+.upd p+p{font-size:14px;margin-top:3px}
+.frame{fill:none;stroke-width:1.8;stroke-linejoin:round}
+.frame.done{stroke:var(--ink)}
+.frame.todo{stroke:var(--rule);stroke-width:1;stroke-dasharray:2 2}
+.ground{stroke:var(--ink);stroke-width:1}
+
+/* chart */
+.chart{display:block;width:100%;height:auto}
+.chart .bar{fill:var(--ink)}
+.chart .bar-o{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-dasharray:3 3}
+.chart text{fill:var(--ink);font-size:11px;font-family:inherit}
+.chart .cv{font-weight:600}
+.chart .axis{stroke:var(--rule)}
+.hb{margin-top:12px}
+.hb-l{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.hb-t{height:10px;background:var(--tone2);border-radius:3px}
+.hb-t i{display:block;height:100%;background:var(--ink);border-radius:3px}
+
+/* club */
+.mcard{background:#000;color:#fff;border-radius:16px;padding:20px;aspect-ratio:1.586;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;box-shadow:0 0 0 1px var(--edge)}
+.mcard>*{position:relative}
+.mcard .dim{position:absolute;right:-18%;bottom:-30%;width:78%;fill:none;stroke:#fff;stroke-width:.5}
+.mc-n{font-size:26px;font-weight:300;font-stretch:110%;letter-spacing:-0.02em;margin-top:4px}
+.mc-b{display:flex;justify-content:space-between;font-size:13px;font-weight:600}
+
+/* sheet, toast */
+.scrim{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .2s}
+.scrim.open{opacity:1}
+.scrim[hidden]{display:none}
+.sheet{width:min(100%,460px);max-height:88vh;overflow-y:auto;background:var(--bg);border-radius:18px 18px 0 0;padding:8px 20px calc(24px + env(safe-area-inset-bottom,0px));transform:translateY(24px);transition:transform .22s ease;outline:none;overscroll-behavior:contain}
+.scrim.open .sheet{transform:none}
+.sheet::before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--rule);margin:4px auto 10px}
+.sh-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sh-h h2{font-size:21px;font-weight:600;font-stretch:108%;letter-spacing:-0.02em}
+.sh-s{font-size:14px;margin-top:4px}
+.sheet .btn.wide{margin-top:20px}
+.sheet .btn.wide+.btn.wide{margin-top:10px}
+.qr-wrap{display:grid;place-items:center;margin:16px 0}
+.qr{width:200px;height:200px}
+.qr-bg{fill:#fff}
+.qr-fg{fill:#000}
+.chat{background:var(--tone);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.bub{background:var(--bg);border-radius:4px 12px 12px 12px;padding:10px 12px;font-size:14px;max-width:90%}
+.bub b{font-size:12px}
+.bub p{margin-top:3px}
+.bub small{display:block;font-size:11px;margin-top:6px;text-align:right}
+.docprev{display:grid;place-items:center;gap:6px;background:var(--tone);border-radius:12px;height:150px;margin-top:14px;font-size:13px;font-weight:600;align-content:center}
+.docprev .ic{width:40px;height:40px;stroke-width:1.2}
+.prof-t{display:flex;flex-direction:column;gap:3px}
+.prof-t b{font-size:18px}
+.prof-t span{font-size:13px}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,16px);width:max-content;max-width:min(92vw,420px);background:var(--ink);color:var(--inv);padding:12px 16px;border-radius:10px;font-size:14px;font-weight:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:60}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top" id="top"></header>
+  <main id="view"></main>
+</div>
+<nav class="nav" id="nav" aria-label="Main"></nav>
+<div class="scrim" id="scrim" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true" tabindex="-1"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const sum = a => a.reduce((x, b) => x + b.amt, 0);
+const pad2 = n => String(n).padStart(2, '0');
+
+const I = {
+  home:'M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
+  receipt:'M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h4',
+  cal:'M4 6h16v14H4zM4 10h16M8 3v5M16 3v5',
+  wrench:'M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.5-.5-2.5z',
+  grid:'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
+  bell:'M6 16v-5a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0',
+  back:'M15 5l-7 7 7 7',
+  chev:'M9 6l6 6-6 6',
+  down:'M6 9l6 6 6-6',
+  bolt:'M13 2L4 14h7l-1 8 9-12h-7z',
+  drop:'M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z',
+  shield:'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z',
+  permit:'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM9 12l2 2 4-4',
+  doc:'M6 3h8l4 4v14H6zM14 3v4h4M9 13h6M9 17h6',
+  rupee:'M7 4h10M7 8h10M7 4h3a4 4 0 0 1 0 8H7l7 8',
+  chart:'M5 20V11M11 20V5M17 20v-8M3 20h18',
+  bed:'M3 19V6M3 15h18v4M21 15v-2a3 3 0 0 0-3-3h-8v5M6.5 12.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4',
+  users:'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21a7 7 0 0 1 14 0M17 3a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6.3',
+  store:'M3 9l2-5h14l2 5zM3 9v1a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0V9M5 13v8h14v-8',
+  truck:'M2 6h12v10H2zM14 10h4l3 3v3h-7M5 18.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0M16 18.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0',
+  plus:'M12 5v14M5 12h14',
+  box:'M3 7l9-4 9 4v10l-9 4-9-4zM3 7l9 4 9-4M12 11v10',
+  cog:'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1',
+  fire:'M12 21a7 7 0 0 0 7-7c0-4-3-6-4-10-1 3-3 4-4 6-1-1-1-2-1-4-3 2-5 5-5 8a7 7 0 0 0 7 7z',
+  spray:'M9 3h6v4H9zM8 7h8v14H8zM17 9h3M17 12h4M17 15h3',
+  monitor:'M3 4h18v12H3zM8 20h8M12 16v4',
+  gauge:'M12 21a9 9 0 1 1 9-9M12 12l4-4M3 12h2M12 3v2M19 12h2',
+  repeat:'M4 12a8 8 0 0 1 14-5.3L20 9M20 4v5h-5M20 12a8 8 0 0 1-14 5.3L4 15M4 20v-5h5',
+  ban:'M5.6 5.6l12.8 12.8M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18',
+  log:'M5 4h14v16H5zM8 8h8M8 12h8M8 16h5',
+  check:'M5 12l5 5 9-10',
+  x:'M6 6l12 12M18 6L6 18',
+  qr:'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2v2h-2zM18 18h2v2h-2zM14 18h2M18 14h2',
+  hotel:'M3 21V5h12v16M15 10h6v11M7 9h2M7 13h2M7 17h2M2 21h20',
+  health:'M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11zM12 9v5M9.5 11.5h5',
+  food:'M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 0-3 3-3 6s1 4 3 4',
+  lab:'M9 3h6M10 3v6L4 19a1.5 1.5 0 0 0 1.3 2h13.4a1.5 1.5 0 0 0 1.3-2L14 9V3M7 15h10',
+  trend:'M3 17l6-6 4 4 8-8M15 7h6v6',
+  crown:'M3 8l4 4 5-7 5 7 4-4-2 11H5z',
+  trade:'M4 8h14l-3-3M20 16H6l3 3',
+  sos:'M12 3l10 18H2zM12 10v5M12 18v.01',
+  msg:'M4 20l1.5-4.5A8 8 0 1 1 8.5 19z',
+  hat:'M3 18h18M5 18a7 7 0 0 1 14 0M10 11V6h4v5',
+  phone:'M5 4h4l2 5-3 2a11 11 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 6a2 2 0 0 1 2-2',
+  clock:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2',
+  pin:'M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11zM12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5',
+  camera:'M4 8h4l2-3h4l2 3h4v12H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7',
+  leaf:'M5 19c0-9 6-14 15-14 0 9-5 15-14 15M5 19l7-7',
+  mail:'M3 6h18v12H3zM3 6l9 7 9-7',
+  search:'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM21 21l-5-5',
+  road:'M8 3L5 21M16 3l3 18M12 4v3M12 11v3M12 18v2',
+  star:'M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3l-5.5 2.9 1-6.2L3 9.6l6.2-.9z'
+};
+const LOGO = `<svg class="logo" viewBox="0 0 534 212" role="img" aria-label="LML"><path fill-rule="evenodd" d="M315.44 207.98C315.2 207.84 315 207.61 315 207.47C315 207.33 315.83 205.95 316.84 204.42C320.88 198.29 322.63 195.1 325.4 188.78C325.75 187.99 326.26 186.15 326.76 183.88C327.11 182.26 327.06 58.07 326.71 57.85C326.29 57.59 325.65 58.43 323.38 62.18C322.27 64 320.9 66.25 320.32 67.18C319.73 68.11 319.14 69.1 319 69.38C318.86 69.65 317.74 71.51 316.51 73.5C314.6 76.61 311.25 82.06 310 84.12C309.79 84.46 308.67 86.31 307.5 88.24C306.33 90.17 304.93 92.47 304.38 93.36C302.4 96.54 301.13 98.63 300.86 99.12C300.48 99.81 295.11 108.59 294.12 110.12C293.68 110.81 293.13 111.71 292.9 112.12C292.67 112.54 292.24 113.28 291.93 113.78C291.63 114.28 290.48 116.16 289.38 117.96C288.27 119.76 286.9 122 286.33 122.93C285.75 123.86 284.85 125.34 284.33 126.22C283.8 127.1 283.19 128.11 282.97 128.47C282.75 128.83 281.6 130.7 280.41 132.62C278.56 135.62 277.15 137.97 276.12 139.71C275.47 140.83 269.83 150.02 269.12 151.12C268.68 151.81 268.13 152.71 267.91 153.12C267.45 153.96 267.29 154.22 265.94 156.32C265.42 157.13 265 157.82 265 157.86C265 157.89 264.38 158.93 263.63 160.15C262.88 161.37 261.84 163.09 261.32 163.96C260.8 164.83 260.21 165.81 260 166.14C259.07 167.59 257.11 170.92 256.95 171.31C256.57 172.22 256.14 171.8 254.38 168.87C253.52 167.46 251.98 164.95 250.82 163.11C250.65 162.84 250.11 161.95 249.62 161.12C249.12 160.3 248.23 158.84 247.63 157.88C247.03 156.91 246.13 155.45 245.63 154.62C244.03 151.98 243.68 151.4 242.87 150.12C241.77 148.4 234.74 136.96 234.12 135.91C233.85 135.44 232.89 133.86 232 132.4C231.11 130.95 230.26 129.56 230.12 129.32C229.89 128.92 228.6 126.85 227.82 125.61C227.64 125.34 227.27 124.73 226.99 124.25C226.71 123.77 225.84 122.34 225.05 121.07C224.27 119.79 222.96 117.66 222.14 116.32C221.32 114.97 220.3 113.31 219.87 112.62C218.59 110.61 209.67 96.1 209.12 95.15C208.44 93.97 205.7 89.5 204.34 87.38C203.73 86.41 203.12 85.4 202.98 85.12C202.85 84.85 202.24 83.84 201.63 82.88C201.03 81.91 200.12 80.45 199.63 79.62C199.14 78.8 198.26 77.36 197.68 76.43C196.69 74.83 195.46 72.84 190.8 65.23C189.74 63.5 188.43 61.39 187.88 60.54C185.96 57.54 186.13 51.88 186.06 121.5C186.02 162.24 186.08 184.31 186.25 185.12C187.23 190.06 188.3 192.92 191.32 198.75C193.88 203.7 193.95 203.83 195.07 205.66C195.58 206.5 196 207.37 196 207.6C196 207.97 194.05 208 173.26 208C160.04 208 150.47 207.91 150.39 207.77C150.31 207.65 150.57 206.89 150.97 206.09C151.37 205.28 152.06 203.78 152.5 202.75C152.95 201.72 153.47 200.65 153.66 200.38C153.85 200.11 154 199.72 154 199.5C154 199.29 154.22 198.7 154.5 198.18C154.78 197.67 155 197.11 155 196.94C155 196.77 155.18 196.29 155.39 195.88C155.86 194.99 156.57 192.93 157.4 190.04C157.81 188.64 158.09 186.82 158.25 184.42C158.6 179.31 158.58 31.14 158.24 26.81C158.08 24.84 157.77 22.92 157.49 22.08C157.22 21.31 157 20.52 157 20.34C157 20.02 155.05 14.85 154.36 13.34C154.16 12.9 154 12.45 154 12.33C154 12.2 153.57 11.21 153.05 10.11C152.52 9.02 151.69 7.28 151.2 6.25C150.56 4.92 150.38 4.28 150.56 4.06C150.76 3.82 155.77 3.75 174.11 3.75L197.41 3.75L198.04 4.44C198.62 5.06 199.54 6.43 201.62 9.78C202.04 10.44 203.48 12.76 204.83 14.93C206.18 17.1 208.68 21.07 210.39 23.75C212.09 26.43 213.79 29.13 214.15 29.75C214.52 30.37 215.51 31.94 216.37 33.25C217.22 34.56 218.67 36.86 219.6 38.38C220.53 39.89 222.01 42.25 222.89 43.62C223.77 45 224.72 46.52 225 47C225.28 47.48 225.96 48.55 226.5 49.38C227.04 50.2 227.72 51.27 228 51.75C228.28 52.23 228.71 52.93 228.94 53.29C229.18 53.66 230.03 55.01 230.83 56.29C231.63 57.58 233.01 59.75 233.88 61.12C234.76 62.5 236.13 64.67 236.92 65.94C237.72 67.22 238.68 68.74 239.06 69.32C239.43 69.9 239.86 70.6 240 70.88C240.14 71.15 240.98 72.5 241.86 73.88C242.75 75.25 244.11 77.39 244.88 78.62C245.66 79.86 247 82 247.88 83.38C248.75 84.75 250.4 87.37 251.55 89.2C252.69 91.03 253.79 92.79 254 93.12C254.21 93.45 255.03 94.76 255.83 96.04C256.63 97.33 258 99.5 258.88 100.88C259.75 102.25 261.06 104.33 261.77 105.5C263.24 107.89 263.94 108.75 264.41 108.75C264.58 108.75 265.13 108.05 265.63 107.19C266.12 106.33 267.23 104.53 268.08 103.18C268.93 101.84 271.08 98.41 272.86 95.56C275.78 90.9 277.74 87.79 279.37 85.25C279.68 84.77 280.37 83.67 280.9 82.81C281.44 81.95 282.55 80.19 283.38 78.89C284.2 77.59 285.55 75.44 286.38 74.12C288.15 71.28 289.06 69.82 290.13 68.12C290.57 67.44 291.37 66.16 291.9 65.29C292.44 64.42 293.33 63.02 293.88 62.17C294.43 61.32 295.95 58.91 297.26 56.81C298.56 54.7 299.96 52.45 300.36 51.81C300.76 51.16 301.75 49.63 302.55 48.41C303.35 47.19 304 46.15 304 46.09C304 46.03 304.49 45.23 305.1 44.3C305.7 43.38 307.06 41.22 308.12 39.5C309.18 37.78 310.46 35.73 310.96 34.94C311.46 34.15 312.55 32.44 313.38 31.14C314.2 29.84 315.55 27.69 316.38 26.37C317.2 25.05 318.55 22.91 319.38 21.62C320.2 20.32 321.32 18.53 321.88 17.63C322.43 16.72 323.55 14.93 324.38 13.64C326.06 11 327.29 9.04 329.07 6.19C329.73 5.13 330.48 4.14 330.74 4C331.26 3.73 375.4 3.63 376.1 3.9C376.79 4.16 376.8 4.12 373.72 10.66C373.33 11.51 373 12.27 373 12.36C373 12.45 372.79 13 372.54 13.58C372.14 14.51 371.33 16.61 370.38 19.25C369.67 21.18 369 23.99 368.76 25.98C368.59 27.37 368.5 54.49 368.51 106.1C368.52 190.47 368.46 186.54 369.83 191.12C370.4 193.04 371.87 196.99 372.64 198.66C372.84 199.1 373 199.52 373 199.61C373 199.76 373.73 201.35 375.65 205.42C376.12 206.4 376.5 207.39 376.5 207.61C376.5 207.96 373.66 208 346.52 208C330.03 208 316.39 208.05 316.21 208.12C316.02 208.18 315.68 208.12 315.44 207.98ZM3.85 207.66C3.78 207.47 4.13 206.43 4.64 205.35C5.14 204.26 5.88 202.64 6.29 201.75C6.69 200.86 7.24 199.64 7.51 199.06C7.78 198.47 8 197.87 8 197.72C8 197.57 8.16 197.1 8.36 196.66C9.6 193.92 10.69 190.52 11.28 187.5C11.73 185.21 11.75 182.24 11.75 105.9C11.75 35.97 11.71 26.44 11.37 24.65C10.82 21.71 9.72 18.16 8.5 15.38C8.26 14.82 7.81 13.7 7.49 12.88C6.96 11.49 5.9 9.15 4.3 5.78C3.68 4.48 3.67 4.42 4.13 4.09C4.52 3.81 9.35 3.75 33.02 3.75C64.99 3.75 62.58 3.6 61.55 5.58C60.82 7 59.13 10.71 58.49 12.31C58.2 13.03 57.74 14.11 57.48 14.69C57.22 15.28 57 15.89 57 16.04C57 16.19 56.79 16.78 56.52 17.35C55.95 18.58 55.24 20.87 54.53 23.76L54 25.89L54.06 104.01L54.12 182.12L77.62 182.12L101.12 182.12L103.62 181.54C106.1 180.96 108.69 180.16 110.62 179.37C117.06 176.78 126.77 170.55 136.44 162.81C138.03 161.54 139.42 160.5 139.53 160.5C140.01 160.5 140.01 161.35 139.53 166.08C138.41 176.91 138.21 178.99 137.98 182.12C137.85 183.91 137.63 186.05 137.5 186.88C137.37 187.7 137.14 190.01 137 192C136.85 193.99 136.58 196.92 136.38 198.5C136.19 200.08 135.96 202.67 135.86 204.25C135.77 205.83 135.59 207.32 135.46 207.56C135.24 207.98 131.85 208 69.61 208C14.45 208 3.96 207.95 3.85 207.66ZM393.25 207.63C393.25 207.43 393.47 206.84 393.73 206.32C393.99 205.8 394.68 204.36 395.25 203.12C395.82 201.89 396.51 200.42 396.77 199.86C397.03 199.3 397.25 198.72 397.25 198.58C397.25 198.35 397.8 196.95 398.51 195.38C399.45 193.28 400.69 188.88 401.01 186.5C401.18 185.26 401.24 157.28 401.19 104.5L401.12 24.38L400.55 22.5C400.24 21.47 399.86 20.23 399.71 19.75C399.36 18.62 397.08 12.67 396.5 11.38C396.25 10.82 395.42 9.06 394.65 7.46C393.88 5.85 393.25 4.43 393.25 4.3C393.25 4.16 393.43 3.99 393.65 3.9C393.86 3.82 406.9 3.75 422.61 3.75C445.17 3.75 451.24 3.82 451.44 4.06C451.62 4.28 451.45 4.89 450.87 6.12C449.08 9.93 448.21 11.85 447.89 12.72C447.71 13.22 447.14 14.69 446.63 16C444.71 20.87 444.09 23.14 443.75 26.5C443.41 29.79 443.42 180.75 443.75 181.63L444 182.28L467.56 182.18C490.81 182.08 491.16 182.07 493.38 181.53C495.49 181.01 498.76 180 499.88 179.51C504.04 177.69 505.48 176.95 509.29 174.68C512.09 173 515.44 170.79 517.5 169.23C517.98 168.87 519.5 167.75 520.88 166.74C522.25 165.72 524.39 164.1 525.62 163.13C528.69 160.73 529.27 160.37 529.5 160.75C529.6 160.91 529.59 161.46 529.48 161.96C529.37 162.46 529.2 163.94 529.12 165.25C529.04 166.56 528.76 169.59 528.5 172C528.25 174.41 527.96 177.44 527.88 178.75C527.79 180.06 527.62 181.8 527.49 182.62C527.37 183.45 527.15 185.64 527.01 187.5C526.86 189.36 526.58 192.39 526.38 194.25C526.19 196.11 525.9 199.09 525.74 200.88C525.58 202.66 525.32 204.97 525.16 206L524.88 207.88L459.06 207.94C401.28 207.99 393.25 207.96 393.25 207.63Z"/></svg>`;
+const LMLD = 'M309 492.5C309 491.8 310.2 488.9 311.2 487.3C311.6 486.7 312.2 485.3 312.6 484.3C313.1 483.3 314.3 480.7 315.3 478.5C316.4 476.3 317.7 473.4 318.2 472.2C318.6 470.9 319.2 469.4 319.5 468.9C319.8 468.4 320 467.6 320 467.2C320 466.8 320.2 466.2 320.5 465.9C321.2 464.9 321.2 211.9 320.5 209.8C320.2 209.1 320 208.3 320 208C320 207 317.4 201.1 313.3 192.8C310.9 188 308.9 183.6 308.8 183.2L308.6 182.3 353.4 182.4C398 182.5 398.2 182.5 398.1 183.2C397.9 183.8 396.8 186.2 391.6 197C389.4 201.5 387.6 205.9 387 208.2C386.9 208.7 386.6 209.5 386.4 209.9C386.1 210.4 386 240.6 386.1 332.2L386.2 453.8 419.4 453.9C443.6 454 452.9 453.9 453.4 453.6C453.8 453.4 455.6 453.1 457.5 453C462.2 452.6 465.3 452 468.3 450.9C469.2 450.5 470.1 450.2 470.5 450.1C472.7 449.5 484.2 443.7 486.1 442.3C486.8 441.7 487.6 441.2 488.1 441C489 440.6 489.6 440.2 491.7 438.8C492.5 438.2 494.4 436.9 495.9 435.9C497.4 434.9 498.8 433.9 499 433.7C499.5 433.3 501.8 431.6 503.3 430.6C506.9 428.1 514 422.6 515.3 421.3C517.2 419.5 517.3 419.9 516.3 430.3C515.6 438.9 515.3 442.3 515 445.8C514.9 447.8 514.6 450 514.4 450.7C514.2 451.3 514 453 514 454.5C514 456 513.8 457.7 513.7 458.3C513.5 459 513.2 461.4 513 463.8C512.6 468.5 512.2 473.9 511.6 479.8C511.5 481.8 511.2 485.2 511 487.3C510.9 489.4 510.6 491.6 510.4 492.1L510 493 409.5 493C318.5 493 309 493 309 492.5ZM533 492.5C533 492.1 539 479.4 540.4 476.9C540.5 476.6 541 475.5 541.4 474.4C541.8 473.4 542.3 472.2 542.5 471.8C543.4 470.4 544.6 466 545 462.8C545.5 458.3 545.3 213.1 544.7 210.3C544.2 207.5 543.8 206.3 543 204.7C542.6 203.8 541.9 202.1 541.3 200.8C540.8 199.6 539.5 196.7 538.4 194.5C537.3 192.3 536 189.7 535.5 188.7C535 187.7 534.2 186 533.6 184.9C533.1 183.8 532.7 182.8 532.8 182.6C533 182.5 547.3 182.3 569.4 182.3L605.7 182.3 606 183.1C606.2 183.5 606.6 184.2 607 184.7C608 186.1 612 192.2 612 192.5C612 192.6 613.2 194.5 614.6 196.7C617.4 201 620.6 206 621.1 207C621.3 207.4 622.1 208.5 622.8 209.6C624 211.4 626.4 215.2 627.2 216.4C627.3 216.7 627.9 217.7 628.5 218.6C629 219.4 630.3 221.4 631.3 223C632.3 224.6 633.8 226.9 634.6 228.2C635.4 229.4 636.7 231.5 637.4 232.7C638.2 233.9 639 235.1 639.2 235.4C639.3 235.7 639.7 236.3 640.1 236.9C640.4 237.4 641.4 239.1 642.4 240.6C643.4 242.1 645 244.7 646.1 246.4C647.2 248.1 649.5 251.8 651.2 254.5C652.9 257.2 654.9 260.4 655.6 261.5C656.3 262.6 657.5 264.4 658.2 265.6C659 266.7 660 268.4 660.5 269.2C661 270.1 661.8 271.5 662.4 272.4C663 273.3 663.9 274.7 664.5 275.6C665 276.4 666.3 278.4 667.2 279.9C668.2 281.4 669 282.7 669 282.8C669 282.9 669.6 283.8 670.3 284.8C671 285.7 672.2 287.6 672.9 288.8C674.8 291.9 674.9 292 676.9 295.2C677.8 296.6 679.1 298.7 679.7 299.7C683.4 305.5 684.2 306.7 685.4 308.7C687.3 311.6 687.6 312.1 687.9 312.7C688 312.9 689 314.6 690.2 316.3C691.3 317.9 693.1 320.8 694.2 322.5C695.3 324.3 696.9 326.9 697.8 328.3C698.8 329.8 699.9 331.6 700.4 332.4C700.9 333.2 701.5 334.1 701.7 334.5C702 334.9 702.6 335.9 703.2 336.8C706.9 342.8 707.1 342.9 708.5 340.4C709 339.5 710.1 337.9 710.8 336.7C711.6 335.5 713.1 333.1 714.1 331.5C715.2 329.9 716.9 327.2 717.9 325.7C718.8 324.1 720 322.3 720.4 321.7C722 318.8 724.3 315.3 725.6 313.4C726.2 312.5 727.1 311 727.7 310C728.3 309 729.6 306.9 730.6 305.3C731.6 303.8 732.8 302 733.2 301.3C733.6 300.7 734.6 299.1 735.5 297.8C736.3 296.5 737 295.3 737 295.2C737 295.1 737.5 294.3 738.1 293.5C738.7 292.6 739.5 291.4 739.8 290.8C740.8 289.1 745.3 282.1 746.7 280C747.3 279 748 277.9 748.1 277.7C748.2 277.4 748.6 276.8 748.9 276.3C750.2 274.4 754.5 267.6 755.2 266.6C755.3 266.3 755.9 265.3 756.5 264.4C757 263.6 758.1 261.9 758.8 260.7C763.4 253.6 763.3 253.8 764.1 252.3C764.5 251.7 765.3 250.5 765.9 249.6C766.5 248.7 767 247.9 767 247.8C767 247.7 767.3 247.2 767.6 246.7C768 246.2 768.6 245.2 769.1 244.5C770.1 242.8 771.8 240.2 774 236.7C775.1 235.1 776.5 232.8 777.3 231.5C778.1 230.2 779.3 228.3 780 227.2C780.7 226.1 781.6 224.7 781.9 224.1C782.2 223.6 783 222.4 783.5 221.6C786.3 217.3 788.5 213.8 788.9 213C789 212.7 789.6 211.8 790.2 211C792.4 207.8 796.5 201.2 797 200.1C797.2 199.7 797.6 199 798 198.6C798.4 198.2 799.1 197.1 799.5 196.3C799.9 195.5 800.8 194.1 801.5 193.2C802.2 192.3 802.8 191.3 803 190.9C803.2 190.5 803.6 189.7 804 189.2C804.4 188.6 804.9 187.7 805.1 187.1C805.4 186.6 805.9 185.9 806.1 185.7C806.4 185.5 807 184.6 807.5 183.8L808.4 182.3 843.7 182.3C871.7 182.3 879 182.4 879 182.8C879 183.1 878 185.2 877.4 186.3C876.6 187.6 871.4 198.6 871 199.7C870.8 200.4 870.5 201.1 870.3 201.2C870.1 201.3 870 201.6 870 202C870 202.3 869.8 202.7 869.6 202.9C869.1 203.4 868.1 206.1 867.3 209.3C866.7 211.7 866.7 214.2 866.7 338.2C866.7 443.2 866.7 464.8 867.1 466C868.7 471.2 869.2 472.6 869.6 473C869.8 473.3 870 473.7 870 473.8C870 474.1 870.5 475.3 874.3 483.1C875.8 486.2 877 488.7 877 488.8C877 488.9 877.5 489.7 878 490.7C878.6 491.6 878.9 492.5 878.8 492.7C878.6 493 784.6 493.1 784.2 492.8C784.1 492.7 784.2 492.3 784.4 492.1C784.6 491.8 785 491.3 785.2 491C785.8 489.8 789.4 484.5 790.7 482.8C791.4 481.9 792 481 792 480.9C792 480.8 793 479.2 794.2 477.5C795.4 475.8 796.3 474.3 796.3 474.1C796.3 474 796.8 473.2 797.4 472.4C798.4 471 800.1 467.8 800.7 466.2C800.8 465.8 801.2 464.9 801.5 464.2C801.8 463.5 802 462.3 802 461.5C802 460.6 802.2 459.5 802.5 459C803.1 457.8 803.1 264 802.5 263.8C802.2 263.7 801.7 264.4 798.2 270.2C797.5 271.3 796 273.7 794.8 275.7C793.6 277.6 792.1 280 791.6 281C791 282 790.4 282.9 790.3 282.9C790.1 283 790 283.2 790 283.3C790 283.5 789.2 284.8 788.3 286.2C787.4 287.7 786.5 289.2 786.3 289.7C786 290.1 785.4 291.2 784.8 292C784.2 292.9 783.7 293.7 783.7 293.9C783.7 294 783.1 295 782.4 296C780.8 298.3 780.5 298.9 779.6 300.5C779.2 301.2 778.5 302.4 778 303.2C777.5 303.9 776.3 305.8 775.4 307.3C773.4 310.6 773.2 310.9 771.8 313.2C771.2 314.1 770.7 315 770.7 315.1C770.7 315.2 770.1 316.1 769.5 316.9C768.9 317.8 768.2 318.9 768 319.3C767.6 320.3 767.3 320.8 765.3 323.8C764.5 325.1 763.3 327 762.7 328C761.3 330.3 759.3 333.7 756 339C754.6 341.2 753.1 343.7 752.7 344.4C752.3 345.2 751.3 346.8 750.5 348C748.8 350.6 747 353.6 747 353.8C747 353.9 746.5 354.7 745.9 355.6C745.3 356.5 744.3 358 743.6 359.1C743 360.2 742.3 361.4 742 361.8C741.7 362.2 740.8 363.7 740 365.1C738.6 367.5 735.3 372.8 733.8 375.1C733.5 375.7 732.7 376.9 732.2 377.9C731.7 378.8 730.8 380.1 730.4 380.8C729.4 382.3 729.6 381.8 726.8 386.6C725.5 388.7 724.1 391.1 723.5 392.1C723 393.1 722.5 393.9 722.3 394C722.2 394.1 718.3 400.3 716.5 403.4C716.2 404 715.4 405.2 714.8 406.2C714.2 407.1 713.1 408.9 712.3 410.3C711.5 411.6 710.2 413.7 709.4 414.9C708.7 416.2 707.8 417.6 707.6 418.2C707.3 418.7 706.6 419.7 706 420.5C705.5 421.2 705 421.9 705 422.1C705 422.3 704.5 423.1 704 423.9C703.5 424.7 703 425.5 703 425.6C703 425.8 702.7 426.3 702.3 426.9C701.8 427.4 700.2 430.1 698.5 432.8C695.3 438.2 694.7 438.7 693.8 436.9C693.6 436.3 692.7 434.9 692 433.8C690.6 431.6 687.3 426.3 684.9 422.2C684 420.7 683.1 419.3 682.9 419C682.6 418.7 681.6 417.1 680.7 415.5C679.7 413.9 678.6 412 678.1 411.4C677.7 410.9 677.2 410 677 409.6C676.8 409.2 676.4 408.4 676 407.8C675.6 407.3 675.2 406.5 675 406.2C674.8 405.8 673.7 404 672.5 402.2C671.3 400.3 669.9 398.1 669.4 397.2C668.9 396.3 667.7 394.3 666.6 392.7C665.6 391.1 664.3 389 663.7 388C663.1 387 661.8 384.8 660.7 383.1C659.7 381.4 658.2 378.9 657.4 377.6C655.4 374.4 653.1 370.8 651.4 368.1C650.6 366.9 650 365.8 650 365.8C650 365.7 649.5 364.9 649 364.1C648.5 363.3 648 362.5 648 362.4C648 362.3 647.3 361.2 646.5 360C645.7 358.8 644 356 642.6 353.7C641.2 351.4 639.4 348.5 638.7 347.3C637.9 346.1 636.1 343.2 634.7 340.8C633.2 338.5 631.3 335.3 630.4 333.9C629.6 332.4 628.2 330.3 627.4 329.1C626.6 327.9 626 326.9 626 326.9C626 326.8 625.2 325.4 624.2 323.8C617.4 312.9 617.9 313.6 616.2 310.8C615.4 309.5 613.8 307 612.7 305.2C611.6 303.3 609.6 300.1 608.3 298C607 295.9 605.2 293 604.4 291.7C603.6 290.3 602.6 288.7 602.1 288.2C601.7 287.6 601.3 287 601.3 286.9C601.3 286.7 600.8 285.9 600.2 284.9C599.5 284 599 283.1 599 282.9C599 282.8 598.5 281.9 597.8 281C597.2 280.2 596.7 279.3 596.7 279.2C596.7 279.1 595.9 277.8 594.9 276.2C593.9 274.7 592.2 271.9 591 269.9C589.6 267.6 588.7 266.4 588.3 266.4C587.7 266.5 587.4 458.9 588 462.8C588.7 466.9 591.4 473.3 594.6 478.3C596.4 481.1 599.7 486.6 600.4 488C600.8 488.8 601.6 490.2 602.2 491C602.8 491.8 603.2 492.5 603.1 492.7C602.8 493.3 533 493.1 533 492.5ZM904.2 492.7C904.1 492.5 904.2 491.8 904.5 491.3C906.8 487 908 484.5 908 484.2C908 484.1 909 481.9 910.2 479.4C911.4 476.9 912.5 474.5 912.7 474.2C912.8 473.8 913.4 472.5 913.9 471.3C914.9 469.1 915.4 467.6 915.9 465.2C916.3 462.9 916.2 211.8 915.8 209.8C915 206.6 914.8 205.8 913.9 204C913.4 202.9 913 202 913 201.8C913 201.6 909 193.4 905.8 186.9C904.8 185 904 183.1 904 182.8C904 182.3 992.8 181.9 993.5 182.4C993.7 182.6 990.7 189.7 989.7 191.3C989.5 191.6 988.8 193 988.2 194.3C987.5 195.7 986.8 197.3 986.5 197.8C986.2 198.3 986 198.9 986 199.1C986 199.3 985.8 199.7 985.6 200C985.3 200.3 984.9 201.2 984.5 202C984.2 202.8 983.8 203.8 983.6 204.2C982.9 205.7 982 208.9 982 209.7C982 210.2 981.8 211.2 981.5 211.9C981.1 213 981 227 981.1 333.5L981.2 453.8 1014.6 453.9C1036.7 454 1048.3 453.9 1048.7 453.7C1049 453.5 1050.6 453.2 1052.2 453.1C1053.8 453 1055.6 452.8 1056.2 452.7C1056.7 452.5 1057.8 452.3 1058.7 452.2C1059.5 452.1 1061.1 451.7 1062.2 451.4C1064 450.8 1064.7 450.5 1067.2 449.5C1067.7 449.3 1068.5 448.9 1069 448.8C1069.5 448.6 1070.5 448.1 1071.3 447.7C1072.2 447.3 1073 447 1073.1 447C1073.3 447 1073.7 446.8 1074 446.5C1074.3 446.3 1075.5 445.6 1076.7 445C1077.9 444.4 1079.4 443.5 1080.2 443C1082.4 441.6 1082.6 441.5 1083.7 440.9C1084.3 440.5 1086.2 439.3 1088 438.1C1089.7 437 1091.2 436 1091.3 436C1091.4 436 1092 435.6 1092.5 435C1093 434.4 1093.6 434 1093.8 434C1093.9 434 1094.6 433.6 1095.3 433C1096 432.4 1096.7 432 1096.9 432C1097.1 432 1097.5 431.8 1097.7 431.4C1098 431.1 1099.4 430 1100.8 429C1102.3 427.9 1103.7 426.9 1103.9 426.7C1104.1 426.6 1105.1 425.7 1106.3 424.9C1107.4 424 1108.4 423.2 1108.5 423C1108.7 422.6 1112.1 420.3 1112.5 420.3C1112.6 420.3 1112.6 420.8 1112.5 421.4C1112.4 422 1112.2 424.2 1112 426.3C1111.8 428.4 1111.5 432 1111.3 434.2C1110.8 440.2 1110.4 445.6 1110 449.9C1109.9 452.1 1109.6 454.4 1109.4 455C1109.2 455.6 1109 457.3 1109 458.7C1109 460 1108.8 461.8 1108.6 462.5C1108.4 463.2 1108.1 465.6 1108 467.7C1107.5 473.9 1106.6 484.9 1106.1 490.5L1105.8 492.8 1005.1 492.9C938.2 493 904.3 492.9 904.2 492.7Z';
+const SUBB = {
+  chambers:['Chambers', 854, 'M357.6 608.4Q341.2 608.4 330.1 603.7Q319 599 313.5 589.7Q308 580.4 308 566.9Q308 547 320.7 536.2Q333.4 525.5 357.6 525.5Q371.2 525.5 381.6 529.4Q392 533.4 397.8 540.7Q403.6 548.1 403.6 558.3H383.9Q383.9 552.8 380.6 549.1Q377.2 545.3 371.2 543.3Q365.3 541.4 357.2 541.4Q348.3 541.4 341.9 544.3Q335.5 547.2 332.1 552.6Q328.7 557.9 328.7 565.4V568.3Q328.7 575.7 332.1 581.2Q335.5 586.6 341.9 589.5Q348.3 592.5 357.2 592.5Q365.6 592.5 371.7 590.6Q377.8 588.7 381.2 585Q384.5 581.2 384.5 575.8H403.7Q403.7 585.8 398 593.1Q392.3 600.5 382 604.4Q371.6 608.4 357.6 608.4ZM420.3 607V526.9H440.4V557.7H492.4V526.9H512.5V607H492.4V574.7H440.4V607ZM524.4 607 564.3 526.9H586.9L626.7 607H604.7L597.8 592.6H552.1L545.1 607ZM559.5 577H590.4L581.9 558.7Q581.3 557.5 580.4 555.2Q579.4 552.9 578.3 550.4Q577.3 547.9 576.5 546Q575.7 544.1 575.5 543.6H574.5Q573.6 545.9 572.3 548.8Q571.1 551.7 569.9 554.5Q568.8 557.2 568 558.8ZM638.6 607V526.9H670L686.4 565.5Q687.3 567.5 688.5 570.8Q689.8 574.1 691.1 577.6Q692.4 581.2 693.5 584.1H694.3Q695.3 581.5 696.5 578.1Q697.8 574.7 699.1 571.3Q700.4 568 701.4 565.6L717.9 526.9H748.5V607H728.3V561.1Q728.3 558.9 728.4 556.2Q728.5 553.5 728.6 550.9Q728.7 548.3 728.8 546.4H727.8Q727.2 548.4 726.2 551.1Q725.3 553.7 724.3 556.4Q723.3 559.1 722.5 561.1L702.7 607H683.6L663.7 561.1Q662.6 558.4 661.6 555.7Q660.5 552.9 659.7 550.5Q659 548 658.4 546.4H657.4Q657.6 547.9 657.6 550.4Q657.7 552.8 657.7 555.6Q657.8 558.3 657.8 561.1V607ZM768.6 607V526.9H832.2Q838.6 526.9 843.8 529.4Q848.9 531.9 851.9 536.3Q854.9 540.7 854.9 546.7Q854.9 551.5 853.1 555.2Q851.3 558.9 848.2 561.4Q845.2 563.8 841.4 565V565.5Q845.9 566.4 849.4 569Q853 571.5 855 575.6Q857 579.6 857 585.1Q857 592.3 853.7 597.2Q850.4 602.1 844.8 604.5Q839.2 607 832.3 607ZM788.8 591.4H827Q831.1 591.4 833.7 589.2Q836.4 587 836.4 582.5Q836.4 579.9 835.3 578Q834.2 576 832 574.9Q829.8 573.8 826.4 573.8H788.8ZM788.8 558.8H824.9Q828 558.8 830 557.8Q832.1 556.7 833.2 554.8Q834.3 552.9 834.3 550.6Q834.3 546.5 831.9 544.4Q829.4 542.3 825.5 542.3H788.8ZM872.7 607V526.9H954.8V542.8H892.9V558.5H947.6V574.2H892.9V591.1H955.7V607ZM972.3 607V526.9H1037.1Q1045.7 526.9 1051.3 530.4Q1056.8 533.9 1059.6 539.6Q1062.3 545.4 1062.3 552.3Q1062.3 559.6 1058.7 565.8Q1055 572.1 1047.5 575.6L1064.3 607H1041.6L1027.5 579.2H992.5V607ZM992.5 563.4H1031.1Q1036.1 563.4 1038.9 560.4Q1041.7 557.4 1041.7 552.7Q1041.7 549.6 1040.4 547.3Q1039.2 545.1 1036.8 543.9Q1034.5 542.8 1031.1 542.8H992.5ZM1119.5 608.4Q1110.1 608.4 1102 607.3Q1093.8 606.1 1087.7 603.3Q1081.6 600.4 1078.1 595.2Q1074.7 590 1074.7 582Q1074.7 581.7 1074.7 581.4Q1074.7 581 1074.8 580.7H1094.6Q1094.5 581.2 1094.5 581.8Q1094.4 582.4 1094.4 583.1Q1094.4 586.7 1097.4 588.9Q1100.4 591.1 1105.8 592Q1111.3 593 1118.6 593Q1121.7 593 1125 592.7Q1128.2 592.5 1131.1 592Q1134.1 591.5 1136.4 590.5Q1138.8 589.6 1140.2 588.1Q1141.6 586.7 1141.6 584.7Q1141.6 581.9 1138.8 580.2Q1136.1 578.5 1131.5 577.5Q1126.9 576.4 1121.1 575.7Q1115.3 574.9 1109.2 573.9Q1103 572.9 1097.2 571.3Q1091.5 569.6 1086.8 566.8Q1082.2 564.1 1079.5 559.8Q1076.8 555.5 1076.8 549.2Q1076.8 543.3 1079.7 538.9Q1082.6 534.4 1088 531.4Q1093.5 528.4 1101.3 526.9Q1109 525.5 1118.7 525.5Q1128.5 525.5 1136.1 527Q1143.7 528.6 1148.9 531.6Q1154 534.6 1156.6 539Q1159.3 543.3 1159.3 548.9V550.7H1139.7V549.4Q1139.7 546.9 1137.2 544.9Q1134.7 543 1130.2 541.8Q1125.7 540.7 1119.8 540.7Q1112 540.7 1107.1 541.6Q1102.2 542.6 1099.8 544.3Q1097.5 546 1097.5 548Q1097.5 550.6 1100.3 552.1Q1103 553.6 1107.6 554.5Q1112.2 555.5 1118 556.2Q1123.8 557 1129.9 558Q1136.1 559 1141.9 560.6Q1147.6 562.3 1152.3 565Q1156.9 567.8 1159.6 571.9Q1162.3 576.1 1162.3 582.2Q1162.3 591.7 1156.9 597.5Q1151.4 603.2 1141.8 605.8Q1132.1 608.4 1119.5 608.4Z'],
+  quarters:['Staff Quarters', 1346, 'M352.8 608.4Q343.4 608.4 335.3 607.3Q327.1 606.1 321 603.3Q314.9 600.4 311.4 595.2Q308 590 308 582Q308 581.7 308 581.4Q308 581 308.1 580.7H327.9Q327.8 581.2 327.8 581.8Q327.7 582.4 327.7 583.1Q327.7 586.7 330.7 588.9Q333.7 591.1 339.1 592Q344.6 593 351.9 593Q355 593 358.2 592.7Q361.5 592.5 364.4 592Q367.4 591.5 369.7 590.5Q372.1 589.6 373.5 588.1Q374.9 586.7 374.9 584.7Q374.9 581.9 372.1 580.2Q369.4 578.5 364.8 577.5Q360.2 576.4 354.4 575.7Q348.6 574.9 342.5 573.9Q336.3 572.9 330.5 571.3Q324.7 569.6 320.1 566.8Q315.5 564.1 312.8 559.8Q310.1 555.5 310.1 549.2Q310.1 543.3 313 538.9Q315.9 534.4 321.3 531.4Q326.8 528.4 334.6 526.9Q342.3 525.5 352 525.5Q361.8 525.5 369.4 527Q377 528.6 382.1 531.6Q387.3 534.6 389.9 539Q392.6 543.3 392.6 548.9V550.7H373V549.4Q373 546.9 370.5 544.9Q368 543 363.5 541.8Q359 540.7 353.1 540.7Q345.3 540.7 340.4 541.6Q335.5 542.6 333.1 544.3Q330.8 546 330.8 548Q330.8 550.6 333.5 552.1Q336.3 553.6 340.9 554.5Q345.5 555.5 351.3 556.2Q357.1 557 363.2 558Q369.4 559 375.2 560.6Q380.9 562.3 385.6 565Q390.2 567.8 392.9 571.9Q395.6 576.1 395.6 582.2Q395.6 591.7 390.2 597.5Q384.7 603.2 375.1 605.8Q365.4 608.4 352.8 608.4ZM438.4 607V543.9H403.2V526.9H493.8V543.9H458.6V607ZM497.9 607 537.8 526.9H560.4L600.2 607H578.2L571.3 592.6H525.6L518.6 607ZM533 577H563.9L555.4 558.7Q554.8 557.5 553.8 555.2Q552.8 552.9 551.8 550.4Q550.8 547.9 550 546Q549.2 544.1 548.9 543.6H548Q547.1 545.9 545.8 548.8Q544.6 551.7 543.4 554.5Q542.3 557.2 541.5 558.8ZM612.1 607V526.9H689.4V542.8H632.2V560.9H683.6V576.8H632.2V607ZM703.3 607V526.9H780.6V542.8H723.4V560.9H774.8V576.8H723.4V607ZM896.4 622.2 881.3 608.3Q880.4 608.3 879.5 608.3Q878.6 608.4 877.6 608.4Q861.9 608.4 850.4 603.5Q838.9 598.6 832.6 589.4Q826.3 580.1 826.3 566.9Q826.3 553.7 832.6 544.4Q838.9 535.2 850.6 530.3Q862.2 525.5 878.3 525.5Q894.4 525.5 906 530.3Q917.7 535.2 924 544.4Q930.3 553.7 930.3 566.9Q930.3 581.1 923 590.7Q915.7 600.4 902.5 604.8L922.8 622.2ZM878.3 592.5Q885.1 592.5 890.9 590.9Q896.6 589.3 900.8 586.2Q905 583.2 907.3 578.6Q909.6 574.1 909.6 568.2V565.5Q909.6 559.6 907.3 555.1Q905 550.6 900.8 547.5Q896.6 544.5 890.9 542.9Q885.1 541.4 878.3 541.4Q871.4 541.4 865.7 542.9Q860 544.5 855.8 547.5Q851.6 550.6 849.4 555.1Q847.1 559.6 847.1 565.5V568.2Q847.1 574.1 849.4 578.6Q851.6 583.2 855.8 586.2Q860 589.3 865.7 590.9Q871.4 592.5 878.3 592.5ZM991.9 608.4Q976.5 608.4 966.5 603.7Q956.4 599.1 951.4 590.4Q946.5 581.8 946.5 569.9V526.9H966.6V568.9Q966.6 580.2 973.2 586.3Q979.8 592.4 991.9 592.4Q1004 592.4 1010.6 586.3Q1017.2 580.2 1017.2 568.9V526.9H1037.3V569.9Q1037.3 581.8 1032.4 590.4Q1027.4 599.1 1017.4 603.7Q1007.4 608.4 991.9 608.4ZM1048.7 607 1088.5 526.9H1111.1L1151 607H1129L1122 592.6H1076.3L1069.4 607ZM1083.7 577H1114.7L1106.1 558.7Q1105.6 557.5 1104.6 555.2Q1103.6 552.9 1102.6 550.4Q1101.6 547.9 1100.8 546Q1099.9 544.1 1099.7 543.6H1098.8Q1097.8 545.9 1096.6 548.8Q1095.3 551.7 1094.2 554.5Q1093 557.2 1092.2 558.8ZM1162.8 607V526.9H1227.6Q1236.2 526.9 1241.8 530.4Q1247.3 533.9 1250.1 539.6Q1252.8 545.4 1252.8 552.3Q1252.8 559.6 1249.2 565.8Q1245.5 572.1 1238 575.6L1254.8 607H1232.1L1218 579.2H1183V607ZM1183 563.4H1221.6Q1226.6 563.4 1229.4 560.4Q1232.2 557.4 1232.2 552.7Q1232.2 549.6 1230.9 547.3Q1229.7 545.1 1227.3 543.9Q1225 542.8 1221.6 542.8H1183ZM1296.9 607V543.9H1261.7V526.9H1352.3V543.9H1317.1V607ZM1364.8 607V526.9H1446.8V542.8H1384.9V558.5H1439.7V574.2H1384.9V591.1H1447.8V607ZM1464.4 607V526.9H1529.2Q1537.8 526.9 1543.3 530.4Q1548.9 533.9 1551.6 539.6Q1554.4 545.4 1554.4 552.3Q1554.4 559.6 1550.8 565.8Q1547.1 572.1 1539.6 575.6L1556.4 607H1533.7L1519.5 579.2H1484.5V607ZM1484.5 563.4H1523.1Q1528.1 563.4 1530.9 560.4Q1533.7 557.4 1533.7 552.7Q1533.7 549.6 1532.5 547.3Q1531.3 545.1 1528.9 543.9Q1526.5 542.8 1523.1 542.8H1484.5ZM1611.6 608.4Q1602.2 608.4 1594.1 607.3Q1585.9 606.1 1579.8 603.3Q1573.7 600.4 1570.2 595.2Q1566.8 590 1566.8 582Q1566.8 581.7 1566.8 581.4Q1566.8 581 1566.9 580.7H1586.7Q1586.6 581.2 1586.5 581.8Q1586.5 582.4 1586.5 583.1Q1586.5 586.7 1589.5 588.9Q1592.4 591.1 1597.9 592Q1603.4 593 1610.7 593Q1613.8 593 1617 592.7Q1620.2 592.5 1623.2 592Q1626.2 591.5 1628.5 590.5Q1630.9 589.6 1632.3 588.1Q1633.6 586.7 1633.6 584.7Q1633.6 581.9 1630.9 580.2Q1628.2 578.5 1623.6 577.5Q1619 576.4 1613.2 575.7Q1607.4 574.9 1601.2 573.9Q1595.1 572.9 1589.3 571.3Q1583.5 569.6 1578.9 566.8Q1574.3 564.1 1571.6 559.8Q1568.8 555.5 1568.8 549.2Q1568.8 543.3 1571.7 538.9Q1574.6 534.4 1580.1 531.4Q1585.6 528.4 1593.3 526.9Q1601.1 525.5 1610.8 525.5Q1620.6 525.5 1628.2 527Q1635.8 528.6 1640.9 531.6Q1646.1 534.6 1648.7 539Q1651.4 543.3 1651.4 548.9V550.7H1631.8V549.4Q1631.8 546.9 1629.3 544.9Q1626.8 543 1622.3 541.8Q1617.8 540.7 1611.9 540.7Q1604.1 540.7 1599.2 541.6Q1594.2 542.6 1591.9 544.3Q1589.6 546 1589.6 548Q1589.6 550.6 1592.3 552.1Q1595 553.6 1599.7 554.5Q1604.3 555.5 1610.1 556.2Q1615.8 557 1622 558Q1628.2 559 1634 560.6Q1639.7 562.3 1644.3 565Q1649 567.8 1651.7 571.9Q1654.4 576.1 1654.4 582.2Q1654.4 591.7 1649 597.5Q1643.5 603.2 1633.8 605.8Q1624.2 608.4 1611.6 608.4Z'],
+  plug:['Plug & Play', 970, 'M533.3 607.3C527.9 607 522.9 606.3 520.3 605.3C511.3 602.1 507.7 600 504.2 596.1C502.3 594 500.3 591.3 500.3 590.8C500.3 590.6 499.2 588 498.6 586.8C497.6 585 497.5 582.2 497.5 555.7L497.5 528.5 508 528.5L518.5 528.5 518.7 554.8L518.9 581.2 519.9 583.6C521.6 587.7 526 591.5 529.8 592.2C530.4 592.3 531.1 592.5 531.2 592.7C531.3 592.9 531.9 593 532.6 593C533.3 593 534.6 593.2 535.3 593.5C536.3 593.8 538 594 540.7 594C543.5 594 545 593.8 545.9 593.5C546.5 593.2 547.6 593 548.1 593C549.3 593 552.4 592 554.5 591C557.8 589.4 562 584.3 562 581.8C562 581.3 562.2 580.4 562.5 579.8C562.9 578.8 563 575.1 563 554C563 540.5 563.1 529.2 563.2 528.9C563.4 528.4 564.6 528.3 573.5 528.3L583.7 528.3 584 529.2C584.9 531.6 584.3 582.9 583.3 584.7C583.1 585.1 583 585.6 583 586C583 586.4 582.8 587.1 582.5 587.6C582.3 588.1 581.5 589.7 580.8 591.1C578.2 596.2 571.1 602 565.3 603.7C564.5 603.9 563.5 604.3 563.2 604.6C562.8 604.8 562.1 605 561.7 605C561.2 605 560.6 605.2 560.4 605.4C558.9 606.9 544.4 607.9 533.3 607.3ZM642 607.3C636.5 607 630.3 606.1 629.4 605.5C629.1 605.4 628.5 605.1 627.9 605C625.2 604.3 620.1 602.3 618.5 601.3C618.1 601 616.9 600.2 615.7 599.5C608 594.8 602.8 586.4 601 575.8C600.5 573.1 600.7 560.1 601.3 557.5C601.5 556.6 601.7 555.3 601.9 554.7C602 554 602.2 553.4 602.3 553.2C602.5 553 603.2 551.5 603.9 549.8C606.5 543.6 611.3 538.3 617.7 534.6C619.8 533.4 621.8 532.3 622.2 532.2C622.5 532.1 623.9 531.6 625.2 531.2C626.5 530.7 627.9 530.2 628.3 530.1C628.8 530 629.4 529.8 629.6 529.6C630 529.2 631.5 528.9 635.2 528.3C644.8 526.8 660.4 526.8 669.5 528.3C674 529.1 674.7 529.2 675.1 529.6C675.3 529.8 675.9 530 676.3 530C676.8 530 677.5 530.2 677.9 530.5C678.2 530.8 678.8 531 679.1 531C680.2 531 684.8 533.1 688 535C694.8 539.1 698.6 544.6 700 551.8C700.5 554.9 701.2 554.7 688.9 554.6L678.2 554.5 678.1 553.7C678 552.9 677.4 551.5 676.6 549.7C676.1 548.7 672.3 545.4 670.9 544.6C668.1 543.2 664.6 542 663.2 542C662.6 542 661.8 541.8 661.4 541.5C660.3 540.7 645.2 540.7 643.7 541.5C643.2 541.8 642.2 542 641.5 542C640.9 542 640.1 542.1 639.7 542.3C639.4 542.4 638.1 542.9 636.8 543.3C629.8 545.6 623.1 553.5 623 559.7C623 560.3 622.8 561.7 622.5 562.7C622.2 563.7 622 565.9 622 567.5C622 569.1 622.2 571.3 622.5 572.3C622.8 573.3 623 574.7 623 575.4C623 576.1 623.1 577 623.3 577.4C623.5 577.8 623.9 579 624.1 580C624.8 582.3 628.1 586.9 629.9 588.2C630.6 588.6 631.8 589.4 632.5 589.9C633.7 590.7 635.7 591.5 639.9 592.7C640.4 592.9 641.4 593 642.1 593C642.7 593 643.9 593.2 644.7 593.5C646.4 594.1 655.1 594.2 656.6 593.6C657.1 593.4 658.5 593.2 659.7 593C670.2 591.7 678.5 585.4 678.8 578.5L678.8 577.5 663.9 577.4C653.3 577.4 648.8 577.2 648.4 576.9C648.1 576.7 648 575.3 648.1 570.4L648.2 564.2 673.8 564.1C692.5 564 699.6 564.1 699.9 564.4C700.5 564.9 700.6 605 700 606C699.6 606.8 685.8 607 685.5 606.2C685.4 606 685 604.2 684.6 602.2C684 599.7 683.6 598.5 683.3 598.4C683.1 598.4 681.2 599.3 679.2 600.5C677.2 601.7 674.7 603 673.7 603.3C672.7 603.7 671.4 604.2 670.8 604.5C665.1 607.1 654.9 608.1 642 607.3ZM790.8 607.3C784.9 607 778.6 606 777.9 605.4C777.7 605.2 777.2 605 776.7 605C776.3 605 775.5 604.8 775.1 604.5C774.6 604.3 773.5 603.9 772.7 603.6C764.8 601.3 758 594.5 757 587.9C756.1 582.7 757.6 578 761.3 574.2C764.4 571 772.3 567 775.5 567C776.6 567 777.2 566.2 776.5 565.5C776.2 565.2 775.7 565 775.4 565C775.2 565 774.5 564.8 774.1 564.5C773.6 564.3 772.2 563.7 771 563.2C766.3 561.3 762.6 558.3 761 555.1C759.9 553 759.8 552.6 759.7 549.2C759.5 542.1 760.9 539.2 766.6 534.8C769.1 533 770.8 532.1 775.2 530.4C775.9 530.2 776.8 529.8 777.2 529.6C778.1 529.1 782.4 528.3 787.7 527.6C791.7 527.1 806.9 527.1 810.7 527.6C815.8 528.3 819.6 529.1 820.1 529.6C820.3 529.8 820.7 530 821 530C821.9 530 827.6 532.6 829.6 533.9C833.9 536.7 838 542.1 838 544.9C838 545.4 838.2 546 838.4 546.3C838.8 546.7 838.9 550.4 838.5 551C838.4 551.2 834.1 551.3 828.3 551.3C817 551.3 818 551.6 818 548.2C818 546.7 817.8 546 817.5 545.7C817.2 545.4 817 545.1 817 544.9C817 544 815.2 542.7 810.9 540.6C807.6 538.9 793.3 539 788.3 540.7C777.1 544.5 776.7 556 787.8 559.2C788.6 559.5 789.5 559.7 790 559.9C790.5 560 794.2 560.2 798.3 560.3L805.8 560.5 805.8 566.7L805.8 572.8 798.2 573C793.1 573.1 790.2 573.3 789.6 573.6C789 573.8 788.3 574 787.8 574C786.6 574 782.7 575.3 781.3 576.2C777.6 578.5 776.4 585.5 779.2 589.2C782.5 593.7 789.9 595.7 801.5 595.1C809.6 594.8 815.1 592.3 817.3 588.1C818 586.7 818 586.2 818 574C818 567.1 818.1 561.2 818.2 560.9C818.5 560.1 851.8 560.1 852.1 560.9C852.5 561.9 852.4 572.2 851.9 572.6C851.7 572.9 849.7 573 845.3 573C840.6 573 839 573.1 838.9 573.4C838.8 573.6 838.7 576.4 838.7 579.5C838.7 582.6 838.5 585.4 838.3 585.7C838.1 586 838 586.8 838 587.5C838 588.2 837.8 589.1 837.5 589.6C837.3 590.1 836.6 591.5 836.1 592.7C834.3 596.4 829.2 601 824.4 603C823 603.6 821.3 604.3 820.7 604.5C820.1 604.8 819.4 605 819.1 605C818.7 605 818.3 605.2 818.1 605.3C817.9 605.5 817 605.8 816 606C808.6 607.4 800.5 607.8 790.8 607.3ZM308.4 606.3C307.9 605.8 307.8 529.5 308.3 528.7C308.5 528.4 314.2 528.3 337 528.4C364.6 528.6 369.2 528.7 370.1 529.6C370.3 529.8 370.9 530 371.4 530C371.9 530 372.8 530.2 373.4 530.5C374 530.7 375.4 531.3 376.5 531.7C379.9 533 383.7 535.9 385.9 538.9C388.6 542.5 389.7 545.5 390.2 550C391.3 561 387.8 568.9 379.5 574.1C378.2 575 373.3 577 372.7 577C372.4 577 372 577.2 371.7 577.4C371.3 577.8 369.7 578.2 365.8 578.7C364.6 578.9 356 579.1 346.8 579.2C335.7 579.3 330.1 579.5 329.8 579.7C329.4 580 329.3 582.9 329.3 593C329.3 602.6 329.2 606 328.9 606.3C328.4 606.8 309 606.8 308.4 606.3ZM407.4 606.3C407 605.8 406.8 530 407.2 528.9C407.5 528 427.5 528.1 428 529C428.2 529.4 428.3 539.9 428.3 560.8C428.3 578 428.4 592 428.4 592.1C428.5 592.1 440.7 592.2 455.7 592.3L482.8 592.5 482.9 598.8C483 602.3 482.9 605.5 482.8 605.9L482.7 606.7 445.2 606.7C416.6 606.7 407.7 606.6 407.4 606.3ZM908.7 606.3C908.3 605.8 908.1 529.5 908.6 528.7C908.8 528.4 914.6 528.3 937.2 528.5C964.7 528.6 969.5 528.7 970.4 529.6C970.6 529.8 971.1 530 971.6 530C972 530 972.8 530.2 973.4 530.5C974 530.7 975.4 531.3 976.5 531.7C980.6 533.3 985.9 537.6 987.4 540.7C990.3 546.6 990.4 547 990.5 553.5C990.5 560 990.4 560.6 987.6 566.3C986.4 568.7 981.1 573.5 978.1 574.9C976.7 575.5 975.1 576.3 974.6 576.5C974 576.8 973.3 577 972.9 577C972.5 577 972 577.2 971.7 577.4C971.3 577.8 969.7 578.2 965.8 578.7C964.6 578.9 956 579.2 946.8 579.3L930.2 579.5 930 593C929.9 600.4 929.8 606.5 929.7 606.6C929.4 606.9 909.1 606.6 908.7 606.3ZM1007.4 606.2C1007.1 605.9 1007 595.4 1007.1 567.1L1007.2 528.5 1017.5 528.5L1027.8 528.5 1027.9 560C1028 581.3 1028.1 591.6 1028.4 591.8C1028.6 592.1 1037.6 592.2 1055.8 592.3L1082.8 592.5 1082.9 599.3C1083 604.5 1082.9 606.2 1082.6 606.4C1081.8 606.9 1007.8 606.7 1007.4 606.2ZM1088.5 606.2C1088.3 605.9 1090.1 602 1092.6 597.1C1095 592.4 1097.6 587.1 1098.5 585.3C1099.3 583.6 1100.4 581.5 1100.9 580.7C1101.3 579.8 1102.2 578 1102.9 576.7C1103.5 575.3 1104.2 573.9 1104.4 573.5C1105 572.5 1109.3 564.2 1110.7 561.2C1111.4 559.7 1112.4 557.8 1112.8 557C1113.3 556.2 1115.4 552 1117.5 547.8C1123.3 536.3 1127 529.3 1127.4 528.8C1127.9 528.1 1153.7 528.1 1154.4 528.8C1154.6 529 1157.2 533.9 1160.1 539.7C1163 545.5 1165.5 550.4 1165.7 550.7C1165.8 550.9 1166.7 552.7 1167.7 554.7C1168.6 556.6 1169.5 558.4 1169.7 558.7C1169.8 558.9 1170.6 560.5 1171.5 562.2C1172.9 565.2 1175.8 570.9 1187.5 593.9C1190.9 600.6 1193.6 606.2 1193.5 606.4C1193.3 606.7 1172.1 606.8 1171.2 606.5C1170.9 606.3 1169.1 603.1 1167.2 599.1C1165.2 595.1 1163.4 591.9 1163 591.7C1162.6 591.5 1154.7 591.3 1139.9 591.3L1117.4 591.3 1116.7 592.2C1116.4 592.8 1115.8 593.9 1115.4 594.9C1115 595.8 1113.8 598.4 1112.7 600.6C1111.6 602.8 1110.7 604.8 1110.7 605C1110.7 605.2 1110.4 605.6 1110 606C1109.1 606.9 1088.8 607.1 1088.5 606.2ZM1219.7 606.3C1219.4 606 1219.3 602 1219.3 590.4C1219.3 578.8 1219.2 574.7 1218.9 574.1C1218.5 573.4 1216.5 571 1213.6 567.9C1212.8 566.9 1211.8 565.6 1211.3 565C1210.9 564.4 1209.9 563.1 1209 562.1C1205.5 558.2 1204.1 556.5 1203.2 555.2C1202.2 553.8 1200.6 551.9 1197.7 548.6C1196.8 547.6 1195.7 546.3 1195.3 545.7C1194.8 545 1193.9 544 1193.4 543.4C1192.9 542.9 1192.1 541.9 1191.6 541.3C1191.2 540.7 1190.2 539.4 1189.3 538.5C1186.3 535 1182.4 530.1 1181.5 528.8C1181.3 528.4 1183.8 528.3 1193.3 528.3L1205.3 528.3 1206.2 529.6C1206.6 530.3 1207.9 532 1209 533.3C1212.1 537.1 1213.8 539.3 1214.6 540.4C1215 541 1215.8 541.9 1216.3 542.5C1216.8 543 1217.7 544.2 1218.3 545C1219 545.9 1220.4 547.7 1221.5 549.1C1222.6 550.4 1223.9 552 1224.3 552.7C1224.7 553.3 1225.3 554 1225.5 554.2C1225.7 554.4 1226.3 555.1 1226.8 555.8C1228.2 557.7 1230.4 560 1230.8 560C1231.2 560 1233.9 556.9 1235.3 554.6C1235.8 553.9 1236.4 553.2 1236.7 552.9C1237 552.7 1238.5 550.9 1240 548.9C1241.6 546.9 1243.3 544.7 1243.8 544C1244.4 543.3 1245.7 541.6 1246.7 540.3C1247.8 538.9 1249.2 537.1 1250 536.2C1250.7 535.2 1251.7 534 1252.1 533.3C1252.6 532.7 1253.2 531.9 1253.5 531.7C1253.8 531.4 1254.5 530.6 1255 529.8L1256 528.3 1267 528.3C1273.4 528.3 1278 528.5 1278.2 528.6C1278.4 529.1 1277.6 530.6 1276.8 531.2C1276.4 531.4 1275.4 532.6 1274.7 533.6C1273.9 534.7 1273.1 535.8 1272.7 536.1C1272.4 536.3 1271.5 537.4 1270.7 538.4C1270 539.4 1269.2 540.4 1269 540.5C1268.8 540.6 1267.8 541.8 1266.8 543.1C1265.8 544.4 1264.1 546.5 1263 547.8C1261.9 549.1 1260.4 551 1259.7 551.9C1258.9 552.9 1257.7 554.4 1256.9 555.3C1256.1 556.2 1254.7 558 1253.7 559.2C1252.7 560.4 1251.2 562.1 1250.5 563C1249.7 563.8 1248.6 565.2 1248 566C1246.8 567.5 1245.6 569 1242.7 572.5L1241 574.5 1241 590.2C1241 601.9 1240.9 606 1240.6 606.3C1240 606.8 1220.3 606.8 1219.7 606.3ZM1156 577.6C1156.1 576.7 1155.8 576 1153.4 571C1148.8 561.5 1145.9 555.5 1145.5 554.5C1144.4 552 1143.9 550.8 1143.3 549.2C1141.9 545.2 1141.6 544.5 1141.1 543.6C1140.3 542.1 1139.6 542.5 1138.6 545.3C1138.1 546.7 1137.5 548 1137.3 548.2C1137.1 548.3 1137 548.8 1137 549.2C1137 549.6 1136.9 550 1136.7 550.1C1136.6 550.2 1136.1 551.3 1135.7 552.4C1134.7 555.1 1134 556.7 1133.6 557.3C1133.3 557.8 1131.8 560.9 1128.1 568.7C1125.8 573.4 1125.2 574.6 1124.4 576C1123.2 578.1 1122.8 578 1140.2 578C1152.6 578 1156 577.9 1156 577.6ZM360.8 564.8C361.2 564.6 362.3 564.1 363.2 563.7C367.1 562 368.8 559 368.8 553.8C368.7 549.6 368.5 548.9 366.2 546.3C362.8 542.5 361.2 542.2 343.3 542.2L329.5 542.2 329.4 553.3C329.4 559.5 329.4 564.7 329.5 564.9C329.7 565.5 359.8 565.4 360.8 564.8ZM961.9 564.4C966.6 562.5 969 558.9 969 553.6C969 547.5 965.5 543.5 959.2 542.5C958.2 542.3 951.4 542.2 943.8 542.2L930.2 542.2 930.1 553.3C930 559.5 930.1 564.7 930.2 564.9C930.5 565.8 959.7 565.3 961.9 564.4Z']
+};
+const lockup = k => `<svg class="lockup" viewBox="308 182 ${SUBB[k][1]} 426" role="img" aria-label="LML ${SUBB[k][0]}"><path d="${LMLD}${SUBB[k][2]}"/></svg>`;
+/* The name is always the wordmark, never typed: every visible "LML" becomes the logo. */
+const MARK = document.createElement('template');
+MARK.innerHTML = `<svg class="lm" viewBox="306 180 809 315" role="img" aria-label="LML"><path d="${LMLD}"/></svg>`;
+const SKIP = 'svg,textarea,input,script,style,title';
+function brand(n) {
+  const list = [];
+  if (n.nodeType === 3) list.push(n);
+  else if (n.nodeType === 1 && !n.closest(SKIP)) { const w = document.createTreeWalker(n, NodeFilter.SHOW_TEXT); while (w.nextNode()) list.push(w.currentNode); }
+  for (const tn of list) {
+    if (!/\bLML\b/.test(tn.nodeValue) || !tn.parentElement || tn.parentElement.closest(SKIP)) continue;
+    const frag = document.createDocumentFragment();
+    tn.nodeValue.split(/\bLML\b/).forEach((p, i) => { if (i) frag.appendChild(MARK.content.firstElementChild.cloneNode(true)); if (p) frag.appendChild(document.createTextNode(p)); });
+    tn.replaceWith(frag);
+  }
+}
+new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(brand))).observe(document.body, {childList:true, subtree:true});
+brand(document.body);
+const ic = (n, c) => `<svg class="ic${c ? ' ' + c : ''}" viewBox="0 0 24 24" aria-hidden="true"><path d="${I[n] || I.grid}"/></svg>`;
+const fnd = k => `<svg class="fnd ${k || 'solid'}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5L21.5 9.5V21.5H2.5V9.5Z"/></svg>`;
+
+const WD = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MO = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAYS = Array.from({length:7}, (_, i) => new Date(2026, 10, 23 + i));
+const dl = d => `${WD[d.getDay()]} ${d.getDate()} ${MO[d.getMonth()]}`;
+const fmtD = s => { if (!s) return ''; const [, m, d] = s.split('-').map(Number); return `${d} ${MO[m - 1]}`; };
+
+/* ---------- modules and roles ---------- */
+const MODS = {
+  bills:['Bills and payments','receipt','Money','Utilities, maintenance and GST invoices'],
+  dash:['CXO dashboard','chart','Money','Spend, usage, compliance and ESG'],
+  subsidy:['Subsidy desk','rupee','Money','Track your Prime/Focus Area incentives'],
+  desk:['Service desk','wrench','Operations','Raise and track park requests'],
+  permits:['Permissions','permit','Operations','Apply for and track approvals'],
+  gate:['Gate and security','shield','Operations','Gate approvals, passes, attendance, goods and SOS'],
+  build:['Factory build tracker','hat','Operations','Your Built-to-Suit factory, week by week'],
+  docs:['Document vault','doc','Operations','Deeds, approvals and invoices'],
+  chambers:['LML Chambers','cal','Book','Meeting rooms, halls and the exhibition floor'],
+  quarters:['LML Staff Quarters','bed','Book','Rooms and beds for your team, inside the park'],
+  services:['Factory services','cog','Book','Verified pros for machines, utilities, safety and more'],
+  cfc:['Common Facility Centre','lab','Book','Testing lab, design studio and R&D bay'],
+  eco:['Park ecosystem','hotel','Book','Hotel, clinic, food and staff housing'],
+  market:['Marketplace and finance','store','Grow','Verified vendors and business loans'],
+  directory:['Park directory','trade','Grow','Find and work with your neighbours'],
+  grow:['Grow with LML','trend','Grow','Expand, lease, refer or list your unit'],
+  club:['The Club','crown','Community','Events, partner clubs and members'],
+  team:['Team and roles','users','Account','Who can see and pay for what'],
+  settings:['WhatsApp and language','msg','Account','Alerts on WhatsApp, Hindi or English']
+};
+const ALL = Object.keys(MODS);
+const ROLES = {
+  Owner: ALL,
+  CXO: ALL.filter(k => k !== 'team'),
+  Accounts: ['bills','dash','subsidy','docs','market','settings'],
+  Admin: ['desk','permits','gate','build','docs','chambers','quarters','services','cfc','eco','directory','settings'],
+  Security: ['gate','desk','settings']
+};
+
+/* ---------- reference data ---------- */
+const SPACES = {
+  meet:{n:'Meeting room', cap:'Up to 6 people', rate:1500, unit:'hr', credit:true},
+  board:{n:'Boardroom', cap:'Up to 14 people', rate:3000, unit:'hr', credit:true},
+  conf:{n:'Conference hall', cap:'Up to 80 people', rate:12000, unit:'hr'},
+  expo:{n:'Exhibition and display floor', cap:'Column-free floor', rate:90000, unit:'day'},
+  conv:{n:'Convention hall', cap:'Up to 400 people', rate:250000, unit:'day'}
+};
+const BDC = [
+  ['Business address and mail','Use LML Chambers as your business address','store','Get a professional address at LML Chambers. We receive your mail and couriers and tell you on WhatsApp.','Request business address'],
+  ['Reception for visiting buyers','Meet buyers at the Chambers lounge','users','Our front desk welcomes your buyers, serves refreshments and walks them to your unit.','Request reception'],
+  ['Showcase on the display floor','Put your products in front of park visitors','star','Rent a display bay on the column-free exhibition floor, seen by buyers and delegations visiting the park.','Request a display bay']
+];
+const CFC = {
+  lab:{n:'Testing and calibration lab', s:'Material testing, CMM and calibration', rate:2000},
+  design:{n:'Design and development studio', s:'CAD workstations and 3D printing', rate:1200},
+  rnd:{n:'R&D bay', s:'Bench space with power and compressed air', rate:1500},
+  line:{n:'Shared processing line', s:'Cutting, bending and finishing', rate:4000}
+};
+const MILES = [
+  ['Site handover and survey','Done 10 Sep','solid'],
+  ['Excavation and foundation','Done 14 Oct','solid'],
+  ['Steel structure','In progress. 14 of 24 frames up','half'],
+  ['Roof sheeting and cladding','December','line'],
+  ['Industrial flooring','January','line'],
+  ['Power, water, fire-fighting and utilities','January to February','line'],
+  ['Finishing and snag list','February','line'],
+  ['Handover','8 Mar 2027','line']
+];
+const UPDATES = [
+  {w:'Week 11', d:'19 Nov', t:'14 of 24 steel portal frames erected. The crane is on site 24 to 26 Nov for the rest.', f:14},
+  {w:'Week 10', d:'12 Nov', t:'Anchor bolts and base plates done for all 24 frames. Steel delivered to site.', f:6},
+  {w:'Week 9', d:'5 Nov', t:'Foundation curing complete. Plinth beams cast.', f:0}
+];
+const DOCS = [
+  {g:'Property', items:[['Allotment letter','Issued 4 Aug 2026, 2 pages'],['Sale deed','Registered 21 Aug 2026, 18 pages'],['Possession letter','Issued 9 Sep 2026, 1 page'],['Approved site plan','Plot B-14, 1 page']]},
+  {g:'Approvals', items:[['Building plan approval','Approved 12 Sep 2026'],['Pollution consent to establish','Approved 2 Oct 2026'],['Crane entry permit','24 to 26 Nov 2026']]},
+  {g:'Subsidy', items:[['Prime/Focus Area eligibility certificate','Issued 2 Sep 2026'],['Stamp duty refund sanction','Issued 6 Nov 2026']]},
+  {g:'Bills and tax', items:[['GST invoices, FY 2026–27','8 invoices'],['Maintenance agreement','Signed 9 Sep 2026']]}
+];
+const UNITS = [
+  ['Hindustan Rasayan','Chemicals','A-02'],
+  ['Kaveri Packaging','Corrugated boxes and cartons','A-07'],
+  ['Mewat Polymers','Injection-moulded parts','B-03'],
+  ['Shree Fasteners','Industrial fasteners','B-09'],
+  ['NovaCable','Wires and cables','B-11'],
+  ['Arora Precision Components','CNC-machined parts','B-14',1],
+  ['Aravalli Foods','Packaged snacks','C-04'],
+  ['Delta Steel Fab','Steel fabrication','C-08']
+];
+const VENDORS = {
+  'Contractors':{i:'hat', list:[['Sharma Infra Builders','4.8',23],['Mewat Civil Works','4.6',17],['Kaushik Constructions','4.5',11]]},
+  'Manpower':{i:'users', list:[['Nuh Skill Staffing','4.7',31],['ProShift Manpower','4.5',19],['Aravalli Workforce','4.4',12]]},
+  'Transport':{i:'truck', list:[['Expressway Logistics','4.8',42],['Jhirka Roadlines','4.6',27],['NCR Freight Movers','4.4',15]]},
+  'Machinery':{i:'wrench', list:[['Delhi Machine Tools','4.7',14],['Precision Tooling House','4.6',9],['Gurugram Industrial Supplies','4.5',21]]},
+  'CA and tax':{i:'rupee', list:[['Mittal and Associates','4.9',26],['Goyal Tax Advisors','4.6',13],['RKG and Co.','4.5',8]]},
+  'Legal':{i:'doc', list:[['Verma Legal','4.7',10],['Compliance Desk LLP','4.6',18],['Saxena and Partners','4.4',6]]},
+  'Insurance':{i:'shield', list:[['Industrial Shield Brokers','4.7',20],['SafeCover Insurance','4.5',14],['Prime Risk Advisors','4.4',9]]},
+  'Facility services':{i:'leaf', list:[['CleanCore Facility','4.6',22],['Guardwell Security','4.5',16],['Sentinel Facility Services','4.4',10]]},
+  'Raw materials':{i:'box', list:[['NCR Polymers Depot','4.7',28],['Haryana Steel Traders','4.6',19],['Aravalli Metals','4.5',12]]},
+  'Packaging':{i:'box', list:[['Bharat Packaging','4.8',35],['Corrupack Industries','4.6',21],['FlexiWrap Solutions','4.4',9]]},
+  'Equipment on rent':{i:'truck', list:[['Mewat Crane and Hydra','4.7',24],['ForkLift Rentals India','4.6',16],['GenSet Hire Co.','4.5',11]]},
+  'Hiring and HR':{i:'users', list:[['TalentBridge Industrial','4.6',17],['Payroll Pro Services','4.5',14],['Skill India Partner Centre','4.4',8]]},
+  'IT and software':{i:'monitor', list:[['FactoryERP Solutions','4.7',13],['SecureNet Systems','4.6',18],['Tally Partner Gurugram','4.5',22]]},
+  'Exports':{i:'trend', list:[['Global Trade Desk','4.7',9],['ExIm Docs and Customs','4.6',15],['Freight Forwarders NCR','4.5',12]]}
+};
+const FIN = [
+  ['Working capital loan','For raw material and payroll',['₹25 lakh','₹50 lakh','₹1 crore','₹2 crore'],['6 months','12 months','24 months']],
+  ['Machinery loan','For new or used machines',['₹50 lakh','₹1 crore','₹3 crore'],['3 years','5 years','7 years']],
+  ['Invoice discounting','Get paid early on buyer invoices',['₹10 lakh','₹25 lakh','₹50 lakh'],['30 days','60 days','90 days']],
+  ['Equipment lease','Use new machines now, pay monthly',['₹25 lakh','₹50 lakh','₹1 crore'],['3 years','5 years']],
+  ['Bank guarantee','For tenders and large buyer orders',['₹10 lakh','₹50 lakh','₹1 crore'],['1 year','2 years']]
+];
+const GROW = [
+  ['expand','trend','Expand in Phase 2','Get first look at plots before launch'],
+  ['lease','store','Lease a ready factory','LML Plug & Play sheds, operational from day one'],
+  ['refer','users','Refer a business','Earn maintenance credit when they join'],
+  ['list','doc','List your unit','Lease it out or sell through LML’s resale desk']
+];
+const EVENTS = [
+  {id:'e1', i:'pin', t:'Owners’ Retreat, Rishikesh', s:'15 to 17 Jan 2027. Two nights with park owners', cta:'RSVP', on:'Going'},
+  {id:'e2', i:'leaf', t:'Golf morning', s:'Sat 12 Dec. Partner course in Gurugram', cta:'RSVP', on:'Going'},
+  {id:'e3', i:'star', t:'F1 passes, 2027 season', s:'Limited passes for members', cta:'Request', on:'Requested'},
+  {id:'e4', i:'cal', t:'CXO roundtable at LML Chambers', s:'Thu 3 Dec, 18:30. Exporting under the 2026 MSME policy', cta:'RSVP', on:'Going'}
+];
+const MEMBERS = [['Sanjay Gupta','MD, Kaveri Packaging'],['Farhan Qureshi','Director, Mewat Polymers'],['Nidhi Bansal','CEO, NovaCable'],['Amit Jain','Owner, Shree Fasteners']];
+const CATI = {Power:'bolt', Water:'drop', Roads:'road', Drainage:'drop', Streetlight:'bolt', Security:'shield', Housekeeping:'leaf', Other:'wrench'};
+const TEAM_FOR = {Power:'Park electrical team', Streetlight:'Park electrical team', Water:'Water and drainage team', Drainage:'Water and drainage team', Roads:'Civil maintenance', Security:'Security control room', Housekeeping:'Housekeeping team', Other:'Park helpdesk'};
+const PERMIT_TYPES = ['Fit-out','Hot work','Night work','Heavy vehicle or crane entry','Fire NOC','Pollution consent','Signage','Power load increase'];
+const PK = {Rated:'done', Completed:'done', 'On the way':'act', Overdue:'act', Denied:'act', Inside:'done', Done:'done', Blocked:'act', Paid:'done', Approved:'done', Resolved:'done', Confirmed:'done', Active:'done', Sanctioned:'done', Going:'done', 'Action needed':'act', 'Not started':'idle'};
+
+/* ---------- state ---------- */
+const S = {
+  view:'home', param:null, stack:[], vf:{}, sf:{},
+  role:'Owner', lang:'en', autopay:false, limit:100000,
+  wa:true, waBills:true, waGate:true, waOutage:true, waClub:false,
+  tseq:2047, credits:6,
+  bills:[
+    {id:'b1', name:'Electricity', period:'October 2026', due:'28 Nov', dn:28, amt:151200, icon:'bolt', st:'due'},
+    {id:'b2', name:'Maintenance (CAM)', period:'November 2026', due:'30 Nov', dn:30, amt:48600, icon:'home', st:'due'},
+    {id:'b3', name:'Water', period:'October 2026', due:'28 Nov', dn:28, amt:9880, icon:'drop', st:'due'},
+    {id:'b4', name:'STP and ETP treatment', period:'October 2026', due:'5 Dec', dn:35, amt:14300, icon:'leaf', st:'due'}
+  ],
+  paid:[
+    {name:'Maintenance (CAM)', period:'October 2026', amt:48600, date:'29 Oct'},
+    {name:'Electricity', period:'September 2026', amt:142860, date:'26 Oct'},
+    {name:'Water', period:'September 2026', amt:9240, date:'26 Oct'}
+  ],
+  approvals:[{id:'a1', ids:['b1'], by:'Sunil Yadav', label:'Electricity for October', amt:151200}],
+  tickets:[
+    {id:'T-2041', cat:'Streetlight', ti:'Streetlight out near Gate 2', st:'In progress', sla:'5h 40m left', who:'Park electrical team', at:'Today, 07:10'},
+    {id:'T-2039', cat:'Roads', ti:'Pothole on Road 3 near Plot B-12', st:'Assigned', sla:'1 day left', who:'Civil maintenance', at:'Yesterday, 16:45'},
+    {id:'T-2036', cat:'Water', ti:'Low water pressure at Plot B-14', st:'Resolved', sla:'Fixed in 3h 20m', who:'Water and drainage team', at:'19 Nov'}
+  ],
+  permits:[
+    {id:'p1', ti:'Building plan approval', st:'Approved', s:'Approved 12 Sep 2026', note:'Approved by the LML estate office. The approval letter is in your document vault.'},
+    {id:'p2', ti:'Fit-out permission', st:'In review', s:'Submitted 18 Nov. Site inspection Tue 24 Nov', note:'An estate officer inspects the site on Tue 24 Nov. You’ll get the decision here and on WhatsApp.'},
+    {id:'p3', ti:'Fire NOC', st:'Action needed', s:'Upload your fire layout drawing', note:'The fire layout drawing is missing. Upload it and LML’s compliance desk files your application with the fire department.', need:'Upload fire layout drawing'},
+    {id:'p4', ti:'Pollution consent to establish', st:'Approved', s:'Approved 2 Oct 2026', note:'Issued by the state pollution control board. LML’s compliance desk tracks the renewal date for you.'},
+    {id:'p5', ti:'Crane entry, 50 tonne', st:'Approved', s:'24 to 26 Nov, Gate 1, 06:00 to 18:00', note:'Gate 1 security has the vehicle details. Show this permit at entry.'}
+  ],
+  passes:[
+    {id:'g1', name:'Vikram Sethi', purpose:'Audit', when:'Today, 11:00', veh:'HR 26 DK 4410'},
+    {id:'g2', name:'Anita Rao', purpose:'Meeting', when:'Today, 15:30', veh:''},
+    {id:'g3', name:'Ravi Electricals', purpose:'Contractor', when:'Today, all day', veh:'HR 55 AB 1022'}
+  ],
+  trucks:[{when:'Tue 24 Nov, 08:00 to 10:00', size:'25 to 40 tonne', veh:'RJ 14 GC 7781', load:'Steel coils'}],
+  waiting:[
+    {id:'w1', name:'Rohit Verma', org:'Bharat Packaging', type:'Visitor', why:'Packaging samples for the purchase team', gate:'Gate 1', at:'2 min ago'},
+    {id:'w2', name:'Blue Dart courier', org:'', type:'Delivery', why:'2 parcels for Arora Precision', gate:'Gate 1', at:'Just now'}
+  ],
+  inside:[
+    {id:'i1', name:'Vikram Sethi', s:'Audit. In since 11:02 at Gate 1'},
+    {id:'i2', name:'Ravi Electricals, crew of 4', s:'Contractor. In since 08:40 at Gate 2'},
+    {id:'i3', name:'RJ 14 GC 7781, steel coils', s:'Truck at your loading bay since 08:15. Slot ended 10:00', truck:true, over:true}
+  ],
+  parcels:[{id:'k1', from:'Amazon Business', s:'1 box. Received 09:40 at the security desk'}],
+  frequent:[
+    {id:'f1', name:'Ravi Electricals', s:'Mon to Sat, 08:00 to 18:00. Valid till 31 Dec', code:'482 915'},
+    {id:'f2', name:'Shree Ganesh Transport', s:'Every day, 06:00 to 20:00. Valid till 31 Mar 2027', code:'730 264'},
+    {id:'f3', name:'Mewat Skills Co-op', s:'Contract staff for Shift A and General. Valid till 31 Jan 2027', code:'615 088'}
+  ],
+  groups:[{id:'gp1', name:'Buyer delegation from Dubai', s:'Thu 26 Nov, 10:00. 8 guests. Chambers boardroom'}],
+  blocked:[{id:'b1', name:'Quick Scrap Traders', s:'Blocked 10 Nov. Tried an unauthorised scrap pickup'}],
+  goods:[
+    {id:'m1', ti:'2 injection moulds to Kaveri Castings', s:'Outward, returnable. For repair, due back Wed 2 Dec', st:'Out'},
+    {id:'m2', ti:'12 tonne PP granules', s:'Inward. Truck HR 55 AB 7719, arriving 14:00', st:'Expected'},
+    {id:'m3', ti:'1,200 brake housings to Northline Auto Parts', s:'Outward. Invoice INV-2611, left 09:15', st:'Done'}
+  ],
+  vehicles:[{id:'v1', no:'HR 26 EK 2210', s:'Company car. Sticker 0142'}, {id:'v2', no:'HR 55 AF 9081', s:'Dispatch tempo. Sticker 0143'}],
+  glog:[
+    ['11:02', 'Vikram Sethi entered at Gate 1', 'Visitor pass'],
+    ['10:48', 'Blue Dart dropped 2 parcels at the security desk', 'Delivery'],
+    ['10:15', 'RJ 14 GC 7781 entered at Gate 2', 'Truck slot'],
+    ['09:52', 'Unknown scrap vendor turned away at Gate 1', 'Denied'],
+    ['09:40', 'Amazon Business parcel received at the security desk', 'Delivery'],
+    ['09:15', 'HR 55 AF 9081 left with 1,200 brake housings', 'Goods pass'],
+    ['08:40', 'Ravi Electricals, crew of 4, entered at Gate 2', 'Frequent pass'],
+    ['06:05', 'Shift A: 68 staff checked in', 'Attendance']
+  ],
+  icom:'+91 98110 42210', gAuto:true, gLeave:true, gId:true,
+  svcB:[
+    {id:'s1', svc:'Air compressor service', pro:'Imran Khan', when:'Wed 25 Nov, 10:00 to 12:00', st:'Confirmed'},
+    {id:'s2', svc:'Pest and rodent control', pro:'SafeHome Pest Care', when:'Done on 12 Nov', st:'Completed'}
+  ],
+  bookings:[{id:'c1', sp:'board', when:'Thu 26 Nov, 11:00 to 13:00', free:2, add:['Catering from park F&B'], req:false}],
+  cfcB:[], eco:[], rsvp:{},
+  quarters:{
+    rooms:[
+      {id:'q1', n:'Block A, Room 112', type:'Labour hostel, 6 beds', beds:6, used:6},
+      {id:'q2', n:'Block A, Room 114', type:'Labour hostel, 6 beds', beds:6, used:5},
+      {id:'q3', n:'Block A, Room 116', type:'Labour hostel, 6 beds', beds:6, used:4},
+      {id:'q4', n:'Block C, Room 204', type:'Staff quarters, twin room', beds:2, used:2},
+      {id:'q5', n:'Block C, Room 207', type:'Staff quarters, twin room', beds:2, used:1},
+      {id:'q6', n:'Block C, Room 310', type:'Staff quarters, studio', beds:1, used:1}
+    ],
+    log:[
+      {ti:'Mohit Kumar checked in', s:'Block A, Room 116. Today, 08:40'},
+      {ti:'Imran Ali checked out', s:'Block A, Room 114. Yesterday, 19:15'}
+    ]
+  },
+  subsidy:[
+    {id:'s1', ti:'Stamp duty refund', st:'Sanctioned', s:'₹18.4 lakh, to be credited by 15 Dec'},
+    {id:'s2', ti:'Electricity duty exemption', st:'Active', s:'Applied on every power bill'},
+    {id:'s3', ti:'Capital investment subsidy', st:'Filed', s:'Department verification in progress'},
+    {id:'s4', ti:'Interest subvention', st:'Action needed', s:'Upload 2 documents: term loan sanction letter and bank interest certificate'},
+    {id:'s5', ti:'SGST reimbursement', st:'Not started', s:'Starts once commercial production begins'}
+  ],
+  team:[
+    {id:'m1', n:'Rajiv Arora', r:'Owner', ph:'+91 98110 22314'},
+    {id:'m2', n:'Meera Arora', r:'CXO', ph:'+91 98110 22315'},
+    {id:'m3', n:'Sunil Yadav', r:'Accounts', ph:'+91 99582 10441'},
+    {id:'m4', n:'Pradeep Kumar', r:'Admin', ph:'+91 97170 55302'},
+    {id:'m5', n:'Gate desk, Plot B-14', r:'Security', ph:'+91 97170 55300'}
+  ],
+  notifs:[
+    {t:'Electricity bill for October is ready: ₹1,51,200, due 28 Nov', at:'Today, 08:00', go:'bills'},
+    {t:'Crane entry approved for 24 to 26 Nov at Gate 1', at:'Yesterday', go:'permits'},
+    {t:'Planned power shutdown on Sun 29 Nov, 10:00 to 13:00', at:'Yesterday', go:'desk'},
+    {t:'Stamp duty refund sanctioned: ₹18.4 lakh', at:'6 Nov', go:'subsidy'},
+    {t:'Owners’ Retreat in Rishikesh: RSVPs are open', at:'5 Nov', go:'club'}
+  ]
+};
+const can = k => k === 'home' || k === 'menu' || ROLES[S.role].includes(k === 'chamberBook' ? 'chambers' : k === 'svcCat' ? 'services' : k);
+
+/* ---------- Hindi for home and navigation ---------- */
+const HI = {
+  'Home':'होम', 'Bills':'बिल', 'Book':'बुकिंग', 'Requests':'शिकायतें', 'Gate':'गेट', 'Dashboard':'डैशबोर्ड', 'Permits':'अनुमतियाँ', 'Menu':'मेन्यू',
+  'Pay bills':'बिल भरें', 'Raise request':'शिकायत दर्ज करें', 'Visitor pass':'विज़िटर पास', 'Book Chambers':'चैंबर्स बुक करें', 'Subsidy':'सब्सिडी',
+  'Build tracker':'निर्माण प्रगति', 'Hotel and clinic':'होटल और क्लिनिक', 'Due this month':'इस महीने देय', 'Pay all':'सभी भरें', 'View bills':'बिल देखें',
+  'Needs your attention':'ध्यान दें', 'Good morning':'सुप्रभात', 'Good afternoon':'नमस्कार', 'Good evening':'शुभ संध्या',
+  'Your factory build':'आपकी फ़ैक्टरी का निर्माण', 'Next at LML Chambers':'LML चैंबर्स में अगली बुकिंग', 'Waiting for your approval':'आपकी मंज़ूरी बाकी', 'Book a service':'सेवा बुक करें', 'Staff quarters':'स्टाफ़ क्वार्टर्स', 'Your team at LML Staff Quarters':'LML स्टाफ़ क्वार्टर्स में आपकी टीम'
+};
+const t = s => S.lang === 'hi' ? (HI[s] || s) : s;
+
+/* ---------- builders ---------- */
+let F = {};
+const pill = s => `<span class="pill ${PK[s] || 'open'}">${PK[s] === 'act' ? '<b aria-hidden="true">!</b>' : ''}${s}</span>`;
+const empty = m => `<p class="empty">${m}</p>`;
+const sec = (title, body, id) => `<section class="pad"${id ? ` id="${id}"` : ''}>${title ? `<h2 class="eye">${title}</h2>` : ''}${body}</section>`;
+function row(o) {
+  const attr = o.go ? `data-go="${o.go}"` : o.sheet ? `data-sheet="${o.sheet}"` : o.act ? `data-act="${o.act}"` : '';
+  const tag = attr ? 'button' : 'div';
+  const p = o.p != null ? ` data-p="${esc(o.p)}"` : '';
+  return `<${tag} class="row" ${attr}${p}>${o.i ? `<span class="row-i">${o.i.startsWith('<') ? o.i : ic(o.i)}</span>` : ''}<span class="row-t"><b>${o.ti}</b>${o.s ? `<span>${o.s}</span>` : ''}</span>${o.r ? `<span class="row-r">${o.r}</span>` : ''}${attr && o.chev !== false ? ic('chev', 'chev') : ''}</${tag}>`;
+}
+function chips(g, opts, o) {
+  o = o || {};
+  const cur = o.cur !== undefined ? o.cur : F[g];
+  return `<div class="chips" role="group">` + opts.map(x => {
+    const v = typeof x === 'string' ? x : x.v;
+    const l = typeof x === 'string' ? x : (x.l || x.v);
+    const off = typeof x === 'object' && x.off;
+    const on = o.m ? (F[g] || []).includes(v) : cur === v;
+    return `<button class="chip${on ? ' on' : ''}" data-act="chip" data-g="${g}" data-v="${esc(v)}"${o.m ? ' data-m="1"' : ''}${o.rr ? ' data-rr="1"' : ''}${o.st ? ' data-st="1"' : ''} aria-pressed="${on}"${off ? ' disabled' : ''}>${l}</button>`;
+  }).join('') + `</div>`;
+}
+function fld(k, label, o) {
+  o = o || {};
+  const v = esc(F[k] || '');
+  return `<label class="fld"><span>${label}</span>${o.area ? `<textarea data-f="${k}" rows="3" placeholder="${esc(o.ph || '')}">${v}</textarea>` : `<input data-f="${k}" type="${o.type || 'text'}" placeholder="${esc(o.ph || '')}" value="${v}">`}</label>`;
+}
+const toggle = (k, label) => `<button class="tg${S[k] ? ' on' : ''}" data-act="toggle" data-p="${k}" role="switch" aria-checked="${!!S[k]}" aria-label="${esc(label)}"><span></span></button>`;
+const ms = (a, b, k) => `<div class="ms">${fnd(k)}<div class="ms-t"><b>${a}</b>${b ? `<span>${b}</span>` : ''}</div></div>`;
+const sheetHead = (title, sub) => `<div class="sh-h"><h2>${title}</h2><button class="icon-btn" data-act="closeSheet" aria-label="Close">${ic('x')}</button></div>${sub ? `<p class="sh-s">${sub}</p>` : ''}`;
+const inAppr = id => S.approvals.some(a => a.ids.includes(id));
+const apprCard = a => `<div class="card" style="margin-bottom:8px"><p><b>${esc(a.by)}</b> from Accounts wants to pay ${esc(a.label)}: <b class="num">${inr(a.amt)}</b>.</p><div class="row-b mt"><button class="btn" data-act="approve" data-p="${a.id}">Approve and pay</button><button class="btn ghost" data-act="decline" data-p="${a.id}">Decline</button></div></div>`;
+
+function elecChart() {
+  const v = [14200, 15100, 16800, 17350, 18420, 12060], m = ['Jun','Jul','Aug','Sep','Oct','Nov'];
+  const W = 320, bw = 32, gap = (W - 6 * bw) / 6;
+  return `<svg class="chart" viewBox="0 0 ${W} 142" role="img" aria-label="Electricity use from June to November, in kWh. November is so far this month.">` + v.map((x, i) => {
+    const h = Math.round(x / 20000 * 96), X = gap / 2 + i * (bw + gap), Y = 116 - h;
+    return `<rect x="${X}" y="${Y}" width="${bw}" height="${h}" class="${i === 5 ? 'bar-o' : 'bar'}"/><text x="${X + bw / 2}" y="${Y - 6}" text-anchor="middle" class="cv">${(x / 1000).toFixed(1)}k</text><text x="${X + bw / 2}" y="134" text-anchor="middle">${m[i]}</text>`;
+  }).join('') + `<line x1="0" x2="${W}" y1="116.5" y2="116.5" class="axis"/></svg>`;
+}
+function frames(n) {
+  let p = '';
+  for (let i = 0; i < 24; i++) { const x = 2 + i * 13; p += `<path class="frame ${i < n ? 'done' : 'todo'}" d="M${x} 54V26L${x + 4.5} 18L${x + 9} 26V54"/>`; }
+  return `<svg viewBox="0 0 314 60" role="img" aria-label="${n} of 24 frames erected">${p}<line class="ground" x1="0" x2="314" y1="54.5" y2="54.5"/></svg>`;
+}
+function qr(seed) {
+  let h = 2166136261 >>> 0;
+  for (const c of seed) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  const rnd = () => { h ^= h << 13; h >>>= 0; h ^= h >>> 17; h ^= h << 5; h >>>= 0; return h / 4294967296; };
+  const N = 25; let r = '';
+  const inF = (x, y) => (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { if (!inF(x, y) && rnd() < 0.5) r += `M${x} ${y}h1v1h-1z`; }
+  const f = (x, y) => `M${x} ${y}h7v7h-7zM${x + 1} ${y + 1}v5h5v-5zM${x + 2} ${y + 2}h3v3h-3z`;
+  return `<svg class="qr" viewBox="-2 -2 29 29" role="img" aria-label="Visitor pass QR code"><rect x="-2" y="-2" width="29" height="29" class="qr-bg"/><path d="${r}${f(0, 0)}${f(N - 7, 0)}${f(0, N - 7)}" fill-rule="evenodd" class="qr-fg"/></svg>`;
+}
+const takenFor = day => { const d = +day.split(' ')[1]; return [9 + (d * 3) % 9, 9 + (d * 5) % 9]; };
+
+/* ---------- views ---------- */
+const V = {};
+
+V.home = () => {
+  const due = S.bills.filter(b => b.st === 'due').sort((a, b) => a.dn - b.dn);
+  const total = sum(due);
+  const hr = new Date().getHours();
+  const greet = hr < 12 ? 'Good morning' : hr < 17 ? 'Good afternoon' : 'Good evening';
+  let o = `<section class="pad"><button class="park" data-sheet="park">${ic('pin')}<span>LML Industrial Park, Jhirka Valley</span>${ic('down')}</button><p class="greet">${t(greet)}, <b>Rajiv</b></p></section>`;
+
+  if (can('bills')) {
+    o += `<section class="pad"><div class="unit"><div class="unit-top"><span>Plot B-14</span><span>Arora Precision Components</span></div>` + (due.length
+      ? `<p class="unit-l">${t('Due this month')}</p><p class="unit-n num">${inr(total)}</p><p class="unit-s">${due.length} ${due.length > 1 ? 'bills' : 'bill'}. Next due ${due[0].due}</p><div class="unit-b"><button class="btn inv" data-act="payAll">${t('Pay all')}</button><button class="btn ghost-inv" data-go="bills">${t('View bills')}</button></div>`
+      : `<p class="unit-l">All bills paid</p><p class="unit-n num">₹0</p><p class="unit-s">${S.autopay ? 'Autopay is on for upcoming bills.' : 'Turn on autopay so bills pay on their due date.'}</p><div class="unit-b"><button class="btn inv" data-go="bills">${t('View bills')}</button></div>`) + `</div></section>`;
+  } else {
+    o += `<section class="pad"><div class="unit"><div class="unit-top"><span>Plot B-14</span><span>Gate today</span></div><p class="unit-l">Visitors expected</p><p class="unit-n num">${S.passes.length}</p><p class="unit-s">142 staff in. ${S.trucks.length + 5} truck entries.</p><div class="unit-b"><button class="btn inv" data-sheet="newPass">${t('Visitor pass')}</button><button class="btn ghost-inv" data-go="gate">Open gate</button></div></div></section>`;
+  }
+
+  if (['Owner', 'CXO'].includes(S.role) && S.approvals.length) o += sec(t('Waiting for your approval'), S.approvals.map(apprCard).join(''));
+
+  const QA = [
+    {k:'bills', i:'receipt', l:'Pay bills', go:'bills'}, {k:'desk', i:'wrench', l:'Raise request', sheet:'newTicket'},
+    {k:'gate', i:'qr', l:'Visitor pass', sheet:'newPass'}, {k:'chambers', i:'cal', l:'Book Chambers', go:'chambers'},
+    {k:'permits', i:'permit', l:'Permits', go:'permits'}, {k:'subsidy', i:'rupee', l:'Subsidy', go:'subsidy'},
+    {k:'build', i:'hat', l:'Build tracker', go:'build'}, {k:'quarters', i:'bed', l:'Staff quarters', go:'quarters'}
+  ].filter(q => can(q.k));
+  o += `<section class="pad"><div class="qa-grid">` + QA.map(q => `<button class="qa" ${q.go ? `data-go="${q.go}"` : `data-sheet="${q.sheet}"`}>${ic(q.i)}<span>${t(q.l)}</span></button>`).join('') + `</div></section>`;
+
+  const att = [];
+  const fire = S.permits.find(x => x.st === 'Action needed');
+  if (can('permits') && fire) att.push(row({i:'permit', ti:fire.ti, s:fire.s, r:pill('Action needed'), go:'permits'}));
+  const sub = S.subsidy.find(x => x.st === 'Action needed');
+  if (can('subsidy') && sub) att.push(row({i:'rupee', ti:sub.ti, s:'2 documents needed for your subsidy claim', r:pill('Action needed'), go:'subsidy'}));
+  if (can('desk')) att.push(row({i:'bolt', ti:'Planned power shutdown', s:'Sun 29 Nov, 10:00 to 13:00. Backup DG will run', go:'desk'}));
+  if (can('gate') && S.waiting.length) att.unshift(row({i:'shield', ti:`${S.waiting.length} waiting at the gate`, s:S.waiting.map(w => w.name).join(' and '), r:pill('Action needed'), go:'gate'}));
+  if (can('gate')) att.push(row({i:'truck', ti:'Crane entry approved', s:'24 to 26 Nov at Gate 1', go:'gate'}));
+  if (att.length) o += sec(t('Needs your attention'), att.join(''));
+
+  if (can('services')) o += sec(t('Book a service'), `<div class="qa-grid">` + SVC_HOME.map(k => `<button class="qa" data-go="svcCat" data-p="${k}">${ic(SVC[k].i)}<span>${SVC[k].n}</span></button>`).join('') + `</div><button class="btn ghost wide mt" data-go="services">See all factory services</button>`);
+
+  if (can('build')) o += sec(t('Your factory build'), `<button class="card buildc" data-go="build"><div class="prog">${MILES.map(m => fnd(m[2])).join('')}</div><b>Day 74 of 180</b><span>Steel structure going up. 14 of 24 frames done.</span></button>`);
+
+  if (can('chambers')) {
+    const b = S.bookings[0];
+    o += sec(t('Next at LML Chambers'), b ? row({i:'cal', ti:SPACES[b.sp].n, s:b.when, go:'chambers'}) : row({i:'cal', ti:'Book a room', s:`You have ${S.credits} free hours this month`, go:'chambers'}));
+  }
+  if (can('quarters')) { const qb = qStats(); o += sec(t('Your team at LML Staff Quarters'), row({i:'bed', ti:`${qb.used} of ${qb.beds} beds in use`, s:`${qb.beds - qb.used} free across ${S.quarters.rooms.length} rooms`, go:'quarters'})); }
+  if (can('club')) o += `<section class="pad"><button class="club-t" data-go="club"><p class="eye">The Club</p><p class="ct">Owners’ Retreat, Rishikesh</p><p>15 to 17 Jan 2027. RSVPs are open.</p></button></section>`;
+  o += `<section class="pad"><p class="note">LML One prototype with sample data.</p></section>`;
+  return o;
+};
+
+V.menu = () => {
+  const groups = ['Money', 'Operations', 'Book', 'Grow', 'Community', 'Account'];
+  return `<section class="pad"><div class="card"><div class="prof-t"><b>Rajiv Arora</b><span>Arora Precision Components Pvt. Ltd.</span><span>Plot B-14, LML Industrial Park, Jhirka Valley</span></div></div><p class="lbl">View the app as</p>${chips('role', Object.keys(ROLES), {st:1, rr:1, cur:S.role})}<p class="note">Each team role sees only its own modules. Switch roles to preview what your team sees.</p></section>`
+    + groups.map(g => { const ks = ALL.filter(k => MODS[k][2] === g && can(k)); return ks.length ? sec(g, ks.map(k => row({i:MODS[k][1], ti:MODS[k][0], s:MODS[k][3], go:k})).join('')) : ''; }).join('')
+    + `<section class="pad"><p class="note">LML One prototype with sample data.</p></section>`;
+};
+
+V.bills = () => {
+  const due = S.bills.filter(b => b.st === 'due'), total = sum(due);
+  return `<section class="pad"><div class="card"><p class="eye">Total due</p><p class="big num">${inr(total)}</p><p class="mt0">${due.length ? `${due.length} ${due.length > 1 ? 'bills' : 'bill'} for Plot B-14` : 'You’re all paid up.'}</p>${due.length ? `<button class="btn wide mt" data-act="payAll">Pay ${inr(total)}</button>` : ''}<div class="toggle-row"><span><b>Autopay</b><span>Pay each bill on its due date from your linked account</span></span>${toggle('autopay', 'Autopay')}</div></div></section>`
+    + sec('Due', due.length ? due.map(b => row({i:b.icon, ti:b.name, s:`${b.period}. Due ${b.due}`, r:`<span class="amt num">${inr(b.amt)}</span>${inAppr(b.id) ? pill('Awaiting owner') : `<button class="btn sm" data-act="payOne" data-p="${b.id}">Pay</button>`}`})).join('') : empty('No bills due. New bills appear here on the 1st of each month.'))
+    + sec('Electricity use, kWh', `${elecChart()}<p class="note">November so far: 12,060 kWh. Backup DG ran 3.2 hours this month.</p>`)
+    + sec('Paid', S.paid.map(p => row({i:'check', ti:p.name, s:`${p.period}. Paid ${p.date}`, r:`<span class="amt num">${inr(p.amt)}</span>`, act:'invoice', p:`${p.name}, ${p.period}`, chev:false})).join('') + `<p class="note">Tap a paid bill to email its GST invoice to your accounts team.</p>`);
+};
+
+const trow = x => row({i:CATI[x.cat] || 'wrench', ti:esc(x.ti), s:`${x.id}. ${x.st === 'Resolved' ? x.sla : 'SLA ' + x.sla}`, r:pill(x.st), sheet:'ticket', p:x.id});
+V.desk = () => {
+  const open = S.tickets.filter(x => x.st !== 'Resolved'), done = S.tickets.filter(x => x.st === 'Resolved');
+  return `<section class="pad"><div class="card notice">${ic('bolt')}<div><b>Planned power shutdown</b><p>Sun 29 Nov, 10:00 to 13:00 on Feeder 2. Backup DG will run.</p></div></div><button class="btn wide mt" data-sheet="newTicket">${ic('plus')}Raise a request</button></section>`
+    + sec('Open', open.map(trow).join('') || empty('No open requests. Raise one and track it here until it’s fixed.'))
+    + (done.length ? sec('Resolved', done.map(trow).join('')) : '');
+};
+
+V.permits = () => `<section class="pad"><button class="btn wide" data-sheet="newPermit">${ic('plus')}Apply for a permission</button><p class="note">LML’s compliance desk files with the right authority and tracks each step for you.</p></section>`
+  + sec('Your applications', S.permits.map(p => row({i:'permit', ti:esc(p.ti), s:esc(p.s), r:pill(p.st), sheet:'permit', p:p.id})).join(''));
+
+const hm = () => { const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+const glogIcon = k => ({'Visitor pass':'qr', 'Delivery':'box', 'Truck slot':'truck', 'Denied':'ban', 'Goods pass':'box', 'Frequent pass':'repeat', 'Attendance':'users', 'Approved by you':'check', 'Group pass':'users', 'Checked out':'log'}[k] || 'log');
+const GTABS = ['Today', 'Passes', 'Attendance', 'Goods and vehicles', 'Log'];
+V.gate = () => {
+  const tab = F.gtab || 'Today';
+  let o = `<section class="pad"><div class="stats3"><div><b class="num">${S.inside.length + 139}</b><span>People inside</span></div><div><b class="num">${S.passes.length}</b><span>Visitors expected</span></div><div><b class="num">${S.trucks.length + 5}</b><span>Truck entries</span></div></div><div class="gtabs mt">${chips('gtab', GTABS, {rr:1, cur:tab})}</div></section>`;
+  if (tab === 'Today') {
+    o += sec('At the gate now', S.waiting.length ? S.waiting.map(w => `<div class="card gw"><div class="gw-top"><span class="gw-av" aria-hidden="true">${esc(w.name[0])}</span><span class="row-t"><b>${esc(w.name)}</b><span>${w.org ? esc(w.org) + '. ' : ''}${esc(w.why)}</span><span>${esc(w.type)} at ${esc(w.gate)}, ${esc(w.at)}</span></span></div><div class="row-b mt"><button class="btn sm" data-act="gApprove" data-p="${w.id}">Approve</button>${w.type === 'Delivery' ? `<button class="btn sm ghost" data-act="gLeave" data-p="${w.id}">Leave at gate</button>` : ''}<button class="btn sm ghost" data-act="gDeny" data-p="${w.id}">Deny</button></div></div>`).join('') + `<p class="note">No answer in 60 seconds? The gate calls ${esc(S.icom)}.</p>` : empty('No one is waiting at the gate.'));
+    o += `<section class="pad"><div class="row-b"><button class="btn" data-sheet="newPass">${ic('plus')}Visitor pass</button><button class="btn ghost" data-sheet="truck">${ic('truck')}Truck slot</button></div><div class="row-b mt"><button class="btn ghost" data-sheet="groupPass">${ic('users')}Group pass</button><button class="btn ghost" data-sheet="goodsPass">${ic('box')}Goods pass</button></div><button class="sos" data-sheet="sos">${ic('sos')}<span><b>SOS</b><span>Alert park security to Plot B-14</span></span></button></section>`;
+    o += sec('Inside now', S.inside.map(x => row({i:x.truck ? 'truck' : 'users', ti:esc(x.name), s:esc(x.s), r:x.over ? pill('Overdue') + `<button class="btn sm" data-act="gOut" data-p="${x.id}">Check out</button>` : pill('Inside')})).join('') || empty('No visitors inside right now.'));
+    o += sec('Parcels at the security desk', S.parcels.map(k => row({i:'box', ti:esc(k.from), s:esc(k.s), r:`<button class="btn sm ghost" data-act="gParcel" data-p="${k.id}">Send to unit</button>`})).join('') || empty('No parcels waiting.'));
+    o += sec('Emergency contacts', [['Gate control room', '24 hours, Gate 1', 'Calling the gate control room'], ['Park fire tender', 'On site, 24 hours', 'Calling the park fire station'], ['Ambulance, Apollo Clinic', 'In the park, 24 hours', 'Calling the Apollo Clinic ambulance desk'], ['Police', '112', 'Calling 112']].map(c => row({i:'phone', ti:c[0], s:c[1], act:'toastMsg', p:c[2]})).join(''));
+    o += sec('Gate settings', `<div class="toggle-row" style="border-top:0"><span><b>Let frequent passes in automatically</b><span>No approval needed inside their allowed days and hours</span></span>${toggle('gAuto', 'Let frequent passes in automatically')}</div><div class="toggle-row"><span><b>Leave deliveries at the security desk</b><span>Couriers don’t need to wait for you</span></span>${toggle('gLeave', 'Leave deliveries at the security desk')}</div><div class="toggle-row"><span><b>Ask contractors for photo ID</b><span>Checked at the gate office before entry</span></span>${toggle('gId', 'Ask contractors for photo ID')}</div>` + row({i:'phone', ti:'Gate intercom number', s:`${esc(S.icom)}. Called if no one answers an approval in 60 seconds`, sheet:'icom'}));
+  } else if (tab === 'Passes') {
+    o += sec('Expected visitors', S.passes.map(p => row({i:'qr', ti:esc(p.name), s:`${esc(p.purpose)}. ${esc(p.when)}${p.veh ? '. ' + esc(p.veh) : ''}`, sheet:'passQR', p:p.id})).join('') || empty('No visitors expected. Create a pass and share it on WhatsApp.'));
+    o += sec('Truck slots', S.trucks.map(k => row({i:'truck', ti:esc(k.veh), s:`${esc(k.when)}. ${esc(k.size)}${k.load ? '. ' + esc(k.load) : ''}`, r:pill('Confirmed')})).join('') || empty('No truck slots booked.'));
+    o += sec('Frequent passes', S.frequent.map(f => row({i:'repeat', ti:esc(f.name), s:`${esc(f.s)}. Gate code ${esc(f.code)}`})).join('') + `<button class="btn ghost wide mt" data-sheet="freqPass">${ic('plus')}Add a frequent pass</button>`);
+    o += sec('Group passes', S.groups.map(g => row({i:'users', ti:esc(g.name), s:esc(g.s)})).join('') + `<button class="btn ghost wide mt" data-sheet="groupPass">${ic('plus')}Create a group pass</button>`);
+    o += sec('Blocked', S.blocked.map(b => row({i:'ban', ti:esc(b.name), s:esc(b.s), r:pill('Blocked')})).join('') + `<button class="btn ghost wide mt" data-sheet="blockPerson">${ic('ban')}Block a person or vehicle</button>`);
+  } else if (tab === 'Attendance') {
+    o += `<section class="pad"><div class="stats3"><div><b class="num">142</b><span>Staff in now</span></div><div><b class="num">156</b><span>Expected today</span></div><div><b class="num">9</b><span>Late today</span></div></div><p class="note">Staff check in at the gate with their ID card or 6-digit gate code.</p></section>`;
+    o += sec('By shift', [['Shift A, 06:00 to 14:00', '68 of 72 in. 4 absent'], ['General, 09:00 to 18:00', '54 of 58 in. 9 came in late'], ['Shift B, 14:00 to 22:00', 'Starts at 14:00. 26 expected']].map(x => row({i:'clock', ti:x[0], s:x[1]})).join(''));
+    o += sec('Contract staff', [['Mewat Skills Co-op', '24 of 26 in today'], ['ProStaff Services', '12 of 12 in today']].map(x => row({i:'users', ti:x[0], s:x[1]})).join(''));
+    o += `<section class="pad"><div class="row-b"><button class="btn" data-sheet="addWorker">${ic('plus')}Add a worker</button><button class="btn ghost" data-act="toastMsg" data-p="November attendance sent to accounts on email">${ic('mail')}Send attendance</button></div></section>`;
+  } else if (tab === 'Goods and vehicles') {
+    o += sec('Goods passes', S.goods.map(g => row({i:'box', ti:esc(g.ti), s:esc(g.s), r:pill(g.st)})).join('') + `<button class="btn ghost wide mt" data-sheet="goodsPass">${ic('plus')}Create a goods pass</button>`);
+    o += sec('Company vehicles', S.vehicles.map(v => row({i:'truck', ti:esc(v.no), s:esc(v.s)})).join('') + `<button class="btn ghost wide mt" data-sheet="addVehicle">${ic('plus')}Add a vehicle</button>`);
+  } else {
+    o += sec('Today at your gate', S.glog.map(l => row({i:glogIcon(l[2]), ti:esc(l[1]), s:`${esc(l[0])}. ${esc(l[2])}`, r:l[2] === 'Denied' ? pill('Denied') : ''})).join(''));
+    o += sec('Park patrol', row({i:'shield', ti:'12 night rounds, every checkpoint covered', s:'Last round at 05:40. Nothing reported'}));
+    o += `<section class="pad"><button class="btn ghost wide" data-act="toastMsg" data-p="Today’s gate log sent to your email">${ic('mail')}Email today’s gate log</button></section>`;
+  }
+  return o;
+};
+
+V.build = () => {
+  const day = 74, pct = Math.round(day / 180 * 100);
+  return `<section class="pad"><div class="hero-b"><p class="eye">The Finished Factory by LML</p><p class="big num">Day ${day} <span>of 180</span></p><div class="bar-t inv"><i style="width:${pct}%"></i></div><p class="mt">Plot B-14, 24,000 sq ft. Handover on 8 Mar 2027. On schedule.</p></div></section>`
+    + sec('Milestones', MILES.map(m => ms(m[0], m[1], m[2])).join(''))
+    + sec('Site updates', UPDATES.map(u => `<div class="upd">${frames(u.f)}<p><b>${u.w}, ${u.d}</b></p><p>${u.t}</p></div>`).join('') + `<button class="btn ghost wide mt" data-sheet="siteVisit">Book a site visit</button>`);
+};
+
+V.docs = () => DOCS.map((g, gi) => sec(g.g, g.items.map((d, ii) => row({i:'doc', ti:d[0], s:d[1], sheet:'doc', p:`${gi}-${ii}`})).join(''))).join('');
+
+V.chambers = () => `<section class="pad"><div class="hero-b"><h2>${lockup('chambers')}</h2><p class="mt">30,000 sq ft in the park: the Business Development Centre, a column-free exhibition floor and convention halls under one roof.</p><div class="mt"><div class="kv-inv"><span>Free hours this month</span><b>${S.credits} of 8 left</b></div><div class="bar-t inv"><i style="width:${S.credits / 8 * 100}%"></i></div></div></div></section>`
+  + sec('Book a space', Object.entries(SPACES).map(([k, s]) => row({i:s.unit === 'hr' ? 'cal' : 'store', ti:s.n, s:`${s.cap}. ${inr(s.rate)} per ${s.unit === 'hr' ? 'hour' : 'day'}${s.credit ? '. Free hours apply' : ''}`, go:'chamberBook', p:k})).join(''))
+  + sec('Your bookings', S.bookings.map(b => row({i:'check', ti:SPACES[b.sp].n, s:`${b.when}${b.add.length ? '. ' + b.add.join(', ') : ''}`, r:`${pill(b.req ? 'Requested' : 'Confirmed')}<button class="btn sm ghost" data-act="cancelBooking" data-p="${b.id}" aria-label="Cancel ${SPACES[b.sp].n} booking">Cancel</button>`})).join('') || empty('No bookings yet. Your free hours reset on the 1st of each month.'))
+  + sec('Business Development Centre', BDC.map((b, i) => row({i:b[2], ti:b[0], s:b[1], sheet:'bdc', p:i})).join(''));
+
+V.chamberBook = () => {
+  const k = S.param, sp = SPACES[k], f = S.vf;
+  if (f.day === undefined) f.day = dl(DAYS[1]);
+  if (f.add === undefined) f.add = [];
+  let body = '', pay = 0, free = 0, ok = true, when = '';
+  if (sp.unit === 'hr') {
+    const taken = takenFor(f.day);
+    if (f.dur === undefined) f.dur = '2';
+    if (f.start === undefined) { for (let h = 9; h <= 16; h++) { if (!taken.includes(h) && !taken.includes(h + 1)) { f.start = pad2(h) + ':00'; break; } } }
+    const st = +f.start.slice(0, 2), dur = +f.dur, end = st + dur;
+    ok = end <= 18 && !Array.from({length:dur}, (_, i) => st + i).some(h => taken.includes(h));
+    free = sp.credit ? Math.min(dur, S.credits) : 0;
+    pay = (dur - free) * sp.rate;
+    when = `${f.day}, ${f.start} to ${pad2(end)}:00`;
+    body = `<p class="lbl">Start time</p>${chips('start', Array.from({length:9}, (_, i) => ({v:pad2(9 + i) + ':00', off:taken.includes(9 + i)})), {rr:1})}<p class="lbl">Duration</p>${chips('dur', [{v:'1', l:'1 hour'}, {v:'2', l:'2 hours'}, {v:'3', l:'3 hours'}, {v:'4', l:'4 hours'}], {rr:1})}${ok ? '' : `<p class="callout">That time overlaps another booking or runs past 18:00. Pick a shorter duration or another start time.</p>`}`;
+  } else {
+    if (f.days === undefined) f.days = '1';
+    pay = +f.days * sp.rate;
+    when = `${f.day}, ${f.days === '1' ? '1 day' : f.days + ' days'}`;
+    body = `<p class="lbl">Number of days</p>${chips('days', [{v:'1', l:'1 day'}, {v:'2', l:'2 days'}, {v:'3', l:'3 days'}], {rr:1})}<p class="note">The events team calls you to plan the layout, power and logistics.</p>`;
+  }
+  S.calc = {ok, free, pay, when};
+  return `<section class="pad"><div class="card"><p class="eye">LML Chambers</p><h2 class="h2">${sp.n}</h2><p>${sp.cap}. ${inr(sp.rate)} per ${sp.unit === 'hr' ? 'hour' : 'day'}${sp.credit ? '. Your free hours apply' : ''}.</p></div>
+    <p class="lbl">Date</p>${chips('day', DAYS.map(dl), {rr:1})}${body}
+    <p class="lbl">Add to your booking</p>${chips('add', ['Catering from park F&B', 'AV and recording', 'Reception and signage', 'Buyer delegation hosting'], {m:1})}
+    <div class="card mt"><div class="kv"><span>When</span><b>${when}</b></div>${sp.credit ? `<div class="kv"><span>Free hours used</span><b>${free} of ${S.credits} left</b></div>` : ''}<div class="kv"><span>${sp.unit === 'hr' ? 'To pay now' : 'Estimated cost'}</span><b class="num">${inr(pay)}</b></div><button class="btn wide mt" data-act="bookChamber"${ok ? '' : ' disabled'}>${sp.unit === 'hr' ? 'Confirm booking' : 'Request booking'}</button></div></section>`;
+};
+
+V.cfc = () => `<section class="pad"><p class="lead">Shared facilities for testing, design and production. Book by the hour and pay with your monthly bill.</p></section>`
+  + sec('Facilities', Object.entries(CFC).map(([k, c]) => row({i:'lab', ti:c.n, s:`${c.s}. ${inr(c.rate)} per hour`, sheet:'cfcBook', p:k})).join(''))
+  + sec('Your bookings', S.cfcB.map(b => row({i:'check', ti:b.ti, s:b.s, r:pill('Confirmed')})).join('') || empty('No bookings yet. Pick a facility above to book it.'));
+
+const QTYPES = [
+  ['Bed in the labour hostel', 'Six to a room, with lockers and mess meals', '₹3,500 per bed a month'],
+  ['Twin room, staff quarters', 'For supervisors and technicians. Attached bath', '₹9,000 per room a month'],
+  ['Studio, staff quarters', 'For managers. Kitchenette and attached bath', '₹14,000 a month']
+];
+const qStats = () => S.quarters.rooms.reduce((a, r) => ({beds:a.beds + r.beds, used:a.used + r.used}), {beds:0, used:0});
+V.quarters = () => {
+  const q = qStats(), req = S.eco.filter(e => e.i === 'bed');
+  return `<section class="pad"><div class="hero-b"><h2>${lockup('quarters')}</h2><p class="mt">Furnished rooms and beds inside the park, a short walk from your shop floor. Meals, laundry and security included.</p><div class="mt"><div class="kv-inv"><span>Your beds in use</span><b>${q.used} of ${q.beds}</b></div><div class="bar-t inv"><i style="width:${q.used / q.beds * 100}%"></i></div></div></div>`
+    + `<div class="row-b mt"><button class="btn" data-sheet="checkIn">${ic('plus')}Check in</button><button class="btn ghost" data-sheet="hostel">Add beds</button></div></section>`
+    + sec('Your rooms', S.quarters.rooms.map(r => row({i:'bed', ti:r.n, s:`${r.type}. ${r.used} of ${r.beds} in use`, r:pill(r.used >= r.beds ? 'Full' : `${r.beds - r.used} free`)})).join(''))
+    + (req.length ? sec('Your requests', req.map(e => row({i:'bed', ti:esc(e.ti), s:esc(e.s), r:pill(e.st)})).join('')) : '')
+    + sec('Recent', S.quarters.log.slice(0, 4).map(l => row({i:'users', ti:esc(l.ti), s:esc(l.s)})).join(''))
+    + sec('Rooms and rates', QTYPES.map(x => row({i:'bed', ti:x[0], s:`${x[1]}. ${x[2]}`})).join(''))
+    + sec('Included', `<div class="card"><div class="kv"><span>Meals</span><b>Mess, three times a day</b></div><div class="kv"><span>Housekeeping</span><b>Daily, with laundry</b></div><div class="kv"><span>Security</span><b>24 hours, ID check at entry</b></div><div class="kv" style="border:0"><span>Billing</span><b>On your monthly statement</b></div></div>`);
+};
+
+const SVC = {
+  machines:{n:'Machine repair', i:'wrench', list:[['CNC and VMC breakdown', 'Diagnosis and repair on your floor', 2500, 'visit'], ['Injection moulding machine service', 'Hydraulics, heaters and screw check', 4500, 'visit'], ['Hydraulics and pneumatics', 'Leaks, cylinders, valves and hoses', 1800, 'visit'], ['PLC and drives', 'Faults, programming and VFD repair', 3000, 'visit']]},
+  electrical:{n:'Electrical', i:'bolt', list:[['Electrician', 'Wiring, sockets, lights and DB faults', 499, 'visit'], ['Panel and MCC maintenance', 'Cleaning, tightening and testing', 3500, 'panel'], ['Earthing test and report', 'Pit resistance, with a signed report', 2500, 'test'], ['Thermal scan of panels', 'Find hot spots before they trip', 6000, 'visit']]},
+  utilities:{n:'Utilities', i:'cog', list:[['Air compressor service', 'Filters, oil, belts and leak test', 3500, 'service'], ['DG set service', 'Oil, filters, battery and load test', 4000, 'service'], ['Chiller and cooling tower', 'Descaling, pumps and fans', 5000, 'service'], ['HVAC and ducting', 'AC service, ducts and exhaust fans', 2500, 'visit']]},
+  fire:{n:'Fire and safety', i:'fire', list:[['Fire extinguisher refill', 'Pickup, refill, tag and return', 350, 'unit'], ['Fire alarm and hydrant check', 'Test, fix and certify', 4500, 'visit'], ['Fire and safety audit', 'Full audit with a report for your NOC', 15000, 'audit'], ['Safety training for staff', 'Fire drills, PPE and first aid', 8000, 'batch']]},
+  cleaning:{n:'Cleaning and pest control', i:'spray', list:[['Deep cleaning of the shop floor', 'Machines, floors and high walls', 6, 'sq ft'], ['Pest and rodent control', 'Treatment with a compliance certificate', 3000, 'visit'], ['Water tank cleaning', 'Drain, scrub, disinfect and test', 2500, 'tank'], ['Washroom and canteen hygiene', 'Deep clean and sanitise', 1500, 'visit']]},
+  civil:{n:'Civil and fabrication', i:'hat', list:[['Welding and fabrication', 'Racks, guards, platforms and repairs', 1200, 'visit'], ['Epoxy floor coating', 'Dust-free, chemical-resistant floors', 45, 'sq ft'], ['Roof leak repair', 'Sheets, gutters and sealing', 2000, 'visit'], ['Painting', 'Walls, structures and floor marking', 18, 'sq ft']]},
+  it:{n:'IT and security systems', i:'monitor', list:[['CCTV install and repair', 'Cameras, recorders and remote view', 999, 'visit'], ['Networking and Wi-Fi', 'Cabling, routers and shop-floor coverage', 1500, 'visit'], ['Access control and biometrics', 'Attendance devices and door locks', 2500, 'visit'], ['Computer and printer repair', 'Desktops, laptops and printers', 499, 'visit']]},
+  testing:{n:'Testing and calibration', i:'gauge', list:[['Instrument calibration, NABL', 'Gauges, meters and sensors', 800, 'instrument'], ['Weighbridge and scale calibration', 'With a legal metrology certificate', 5000, 'visit'], ['Water and effluent testing', 'Sampling and a lab report', 3500, 'sample'], ['Stack emission monitoring', 'For pollution board compliance', 12000, 'stack']]},
+  handling:{n:'Material handling and logistics', i:'truck', list:[['Forklift repair', 'Engine, hydraulics and tyres', 1800, 'visit'], ['Forklift on rent', 'With an operator', 2500, 'day'], ['Crane or hydra on hire', '12 to 50 tonne, with an operator', 6000, 'day'], ['Tempo or truck booking', 'Local and intercity loads', 0, '']]},
+  manpower:{n:'Manpower on demand', i:'users', list:[['Loaders and helpers', 'For unloading, shifting and packing', 700, 'person a day'], ['Machine operators', 'Trained and verified', 1100, 'person a day'], ['Security guards', 'Licensed, with a supervisor', 950, 'guard a shift'], ['Housekeeping staff', 'For offices, washrooms and canteens', 650, 'person a day']]},
+  waste:{n:'Scrap and waste', i:'repeat', list:[['Scrap pickup at the best price', 'Metal, plastic and paper scrap', 0, ''], ['Hazardous waste disposal', 'By authorised recyclers, with manifests', 0, ''], ['E-waste recycling', 'With a recycling certificate', 0, '']]},
+  compliance:{n:'Compliance and filings', i:'doc', list:[['GST and TDS filing', 'Monthly returns by a CA', 2500, 'month'], ['Factory licence renewal', 'Paperwork and follow-up', 5000, 'filing'], ['Labour law compliance', 'PF, ESI and registers', 3000, 'month'], ['Contracts and legal drafting', 'Vendor, buyer and lease agreements', 2000, 'document']]}
+};
+const SVC_HOME = ['machines', 'electrical', 'utilities', 'fire', 'cleaning', 'it', 'manpower', 'handling'];
+const PROS = [['Mukesh Sharma', '4.8', '1,240'], ['Imran Khan', '4.9', '860'], ['Deepak Saini', '4.7', '2,105'], ['Harish Yadav', '4.8', '640']];
+const AMC = [['Utilities plan', 'Compressor, DG set and chiller. 4 visits a year', '₹48,000 a year'], ['Fire safety plan', 'Extinguishers, alarms and hydrants. Checked every quarter', '₹36,000 a year'], ['Electrical plan', 'Panels, earthing and thermal scans. 4 visits a year', '₹42,000 a year'], ['Pest control plan', 'Monthly treatment, with a compliance certificate', '₹30,000 a year']];
+const svcPrice = x => x[2] ? `From ${inr(x[2])} a${/^[aeiou]/.test(x[3]) ? 'n' : ''} ${x[3]}` : 'Price on quote';
+V.services = () => `<section class="pad"><div class="hero-b"><h2 class="hh">Verified pros at <b>your factory gate</b></h2><p class="mt">Background-checked technicians and firms for every job in your unit. Fixed prices, a GST invoice and a 30-day warranty on the work.</p><button class="btn inv wide" data-sheet="svcUrgent">${ic('bolt')}Machine down? Get help in 60 minutes</button></div>`
+  + `<div class="promise"><div><b>Verified</b>ID and skill checks on every pro</div><div><b>Fixed price</b>Know the cost before you book</div><div><b>Gate-ready</b>Their gate pass is made for you</div></div></section>`
+  + sec('All services', `<div class="qa-grid">` + Object.keys(SVC).map(k => `<button class="qa" data-go="svcCat" data-p="${k}">${ic(SVC[k].i)}<span>${SVC[k].n}</span></button>`).join('') + `</div>`)
+  + sec('Your bookings', S.svcB.map(b => row({i:'cog', ti:esc(b.svc), s:`${esc(b.pro)}. ${esc(b.when)}`, r:b.st === 'Completed' ? (b.rated ? pill('Rated') : `<button class="btn sm ghost" data-sheet="svcRate" data-p="${b.id}">Rate</button>`) : pill(b.st)})).join('') || empty('No bookings yet. Pick a service to get started.'))
+  + sec('Annual maintenance plans', AMC.map((a, i) => row({i:'repeat', ti:a[0], s:`${a[1]}. ${a[2]}`, sheet:'amc', p:i})).join('') + `<p class="note">One fixed yearly price, priority visits and every compliance certificate in your document vault.</p>`);
+V.svcCat = () => {
+  const c = SVC[S.param];
+  return sec('', c.list.map((x, i) => `<div class="row"><span class="row-t"><b>${x[0]}</b><span>${x[1]}</span><span>${svcPrice(x)}</span></span><button class="btn sm" data-sheet="${x[2] ? 'svcBook' : 'svcQuote'}" data-p="${S.param}|${i}">${x[2] ? 'Book' : 'Get quote'}</button></div>`).join('') + `<p class="note">Pay after the job is done, or add it to your monthly park bill.</p>`);
+};
+
+V.eco = () => `<section class="pad"><p class="lead">Everything your team and visitors need, inside the park.</p></section>`
+  + sec('', [
+      ['hotel', 'Hampton by Hilton', 'Rooms for visiting clients and auditors at park rates', 'hotel'],
+      ['health', 'Apollo Clinic', 'Appointments and health check-ups for your staff', 'clinic'],
+      ['food', 'Food for your team', 'McDonald’s, KFC and Haldiram’s, delivered to your gate', 'food']
+    ].map(e => row({i:e[0], ti:e[1], s:e[2], sheet:e[3]})).join('') + row({i:'bed', ti:'LML Staff Quarters', s:'Rooms and beds for your team', go:'quarters'}) + row({i:'store', ti:'High street, factory outlets and cinema', s:'Opening with Phase 2'}) + `<button class="btn ghost wide mt" data-act="emergency">${ic('health')}Medical emergency</button>`)
+  + sec('Your requests', S.eco.map(e => row({i:e.i, ti:esc(e.ti), s:esc(e.s), r:pill(e.st)})).join('') || empty('Nothing booked yet.'));
+
+V.market = () => `<section class="pad"><h2 class="eye">Verified vendors</h2><div class="qa-grid">` + Object.keys(VENDORS).map(c => `<button class="qa" data-sheet="vendors" data-p="${esc(c)}">${ic(VENDORS[c].i)}<span>${c}</span></button>`).join('') + `</div><p class="note">Every vendor is checked by LML and rated by park owners.</p></section>`
+  + sec('Business finance', FIN.map((x, i) => row({i:'rupee', ti:x[0], s:x[1], sheet:'fin', p:i})).join('') + `<p class="note">Offers from partner banks and NBFCs. Your park payment history strengthens your application.</p>`);
+
+function dirList() {
+  const q = (S.vf.q || '').trim().toLowerCase();
+  const list = UNITS.filter(u => (u[0] + ' ' + u[1]).toLowerCase().includes(q));
+  if (!list.length) return empty('No units match. Try a product, like “cartons” or “cables”.');
+  return `<h2 class="eye">${list.length} ${list.length > 1 ? 'units' : 'unit'}</h2>` + list.map(u => row({i:'store', ti:u[0] + (u[3] ? ' (you)' : ''), s:`${u[1]}. Plot ${u[2]}`, r:u[3] ? '' : `<button class="btn sm ghost" data-act="connect" data-p="${esc(u[0])}">Connect</button>`})).join('');
+}
+V.directory = () => `<section class="pad"><label class="search">${ic('search')}<input data-f="q" data-live="dir" type="search" placeholder="Search by product or company" value="${esc(S.vf.q || '')}" aria-label="Search the park directory"></label></section><section class="pad" id="dirlist">${dirList()}</section>`;
+
+V.grow = () => sec('', GROW.map(g => row({i:g[1], ti:g[2], s:g[3], sheet:'growForm', p:g[0]})).join(''));
+
+V.club = () => {
+  const dim = [0, 1, 2, 3, 4].map(i => { const s = 1 - i * 0.17; return `<path d="M50 ${58 - 40 * s}L${50 + 40 * s} ${58 - 12 * s}V${58 + 36 * s}H${50 - 40 * s}V${58 - 12 * s}Z"/>`; }).join('');
+  return `<section class="pad"><div class="mcard"><svg class="dim" viewBox="0 0 100 100" aria-hidden="true">${dim}</svg><div><p class="eye">The Club</p><p class="mc-n">Rajiv Arora</p></div><div class="mc-b"><span>Founding member</span><span>No. 0014</span></div></div><p class="note">Membership comes with ownership in an LML park. There’s no fee.</p></section>`
+    + sec('Upcoming', EVENTS.map(e => row({i:e.i, ti:e.t, s:e.s, r:`<button class="btn sm${S.rsvp[e.id] ? '' : ' ghost'}" data-act="rsvp" data-p="${e.id}" aria-pressed="${!!S.rsvp[e.id]}">${S.rsvp[e.id] ? e.on : e.cta}</button>`})).join(''))
+    + sec('Partner clubs', row({i:'crown', ti:'Quorum Club, Gurugram', s:'Member access for you and one guest'}) + row({i:'plus', ti:'More partner clubs', s:'Being added across Delhi NCR'}))
+    + sec('Members', MEMBERS.map(m => row({i:'users', ti:m[0], s:m[1], r:`<button class="btn sm ghost" data-act="connect" data-p="${esc(m[0])}">Connect</button>`})).join(''));
+};
+
+V.team = () => `<section class="pad"><div class="card"><b>Payment approvals</b><p class="mt0">Payments above this amount need the owner’s approval.</p><div class="mt">${chips('limit', [{v:'50000', l:'₹50,000'}, {v:'100000', l:'₹1,00,000'}, {v:'200000', l:'₹2,00,000'}, {v:'0', l:'No approval'}], {st:1, rr:1, cur:S.limit === Infinity ? '0' : String(S.limit)})}</div></div></section>`
+  + (S.approvals.length ? sec('Waiting for you', S.approvals.map(apprCard).join('')) : '')
+  + sec('Members', S.team.map(m => row({i:'users', ti:esc(m.n), s:m.r, sheet:'member', p:m.id})).join('') + `<button class="btn wide mt" data-sheet="addMember">${ic('plus')}Add a team member</button>`);
+
+V.settings = () => `<section class="pad"><div class="toggle-row" style="border-top:0"><span><b>WhatsApp alerts</b><span>Get alerts and act on them without opening the app</span></span>${toggle('wa', 'WhatsApp alerts')}</div>`
+  + (S.wa ? [['waBills', 'Bills and payments'], ['waGate', 'Visitor approvals at the gate'], ['waOutage', 'Power and water notices'], ['waClub', 'Club invitations']].map(([k, l]) => `<div class="toggle-row"><span><b>${l}</b></span>${toggle(k, l)}</div>`).join('') : '')
+  + `<button class="btn ghost wide mt" data-sheet="waPreview">${ic('msg')}See a sample WhatsApp alert</button></section>`
+  + sec('Language', `${chips('lang', [{v:'en', l:'English'}, {v:'hi', l:'हिंदी'}], {st:1, rr:1, cur:S.lang})}<p class="note">In this prototype, Hindi covers the home screen and navigation.</p>`);
+
+V.subsidy = () => {
+  const steps = [['Eligibility confirmed', '2 Sep', 'solid'], ['Documents compiled', '28 Sep', 'solid'], ['Application filed', '12 Oct', 'solid'], ['Department verification', 'In progress', 'half'], ['Sanction', 'Expected Jan 2027', 'line'], ['Disbursal', 'After sanction', 'line']];
+  return `<section class="pad"><div class="hero-b"><p class="eye">Notified Prime/Focus Area</p><h2 class="hh">Up to <b>₹10 crore</b></h2><p class="mt">In state incentives under Haryana’s Progressive MSME and Export Promotion Policy 2026.*</p><div class="kv-inv mt"><span>Estimated for your unit</span><b>₹3.4 crore</b></div></div></section>`
+    + sec('Your claim', steps.map(s => ms(s[0], s[1], s[2])).join(''))
+    + sec('Incentives', S.subsidy.map(c => row({i:'rupee', ti:c.ti, s:c.s, r:pill(c.st), act:c.st === 'Action needed' ? 'uploadSubsidy' : null, p:c.id})).join(''))
+    + `<section class="pad"><div class="card"><b>Neha Kapoor, LML Subsidy Desk</b><p class="mt0">Your subsidy manager files every claim and follows up with the department.</p><div class="row-b mt"><button class="btn" data-act="toastMsg" data-p="Calling Neha Kapoor">${ic('phone')}Call</button><button class="btn ghost" data-act="toastMsg" data-p="WhatsApp chat with Neha opened">${ic('msg')}WhatsApp</button></div></div><p class="note">*Conditions apply. Amounts in this prototype are sample data.</p></section>`;
+};
+
+V.dash = () => {
+  const items = [['Electricity', 151200], ['Maintenance (CAM)', 48600], ['Chambers and services', 18500], ['STP and ETP treatment', 14300], ['Water', 9880]];
+  const tot = items.reduce((a, b) => a + b[1], 0), mx = items[0][1];
+  const fire = S.permits.find(p => p.id === 'p3');
+  const comp = [['PF and ESI deposit', 'Due 15 Dec', 'Upcoming'], ['GSTR-3B for November', 'Due 20 Dec', 'Upcoming'], ['Fire NOC', fire.st === 'Action needed' ? 'Fire layout drawing needed' : 'With the fire department', fire.st, 'permits'], ['Consent to operate', 'Apply before production starts', 'Not started'], ['Factory licence', 'Apply before handover in Mar 2027', 'Not started']];
+  const esg = [['68%', 'Water treated and reused on site'], ['100%', 'Effluent treated at the park ETP'], ['99.6%', 'Power uptime with backup'], ['1.2 ML', 'Rainwater harvested this monsoon']];
+  return `<section class="pad"><div class="card"><p class="eye">November spend</p><p class="big num">${inr(tot)}</p><p class="mt0">Mostly electricity. Your second shift added 1,070 kWh over September.</p>${items.map(([l, v]) => `<div class="hb"><div class="hb-l"><span>${l}</span><b class="num">${inr(v)}</b></div><div class="hb-t"><i style="width:${v / mx * 100}%"></i></div></div>`).join('')}</div></section>`
+    + sec('Electricity use, kWh', `${elecChart()}<p class="note">Average cost ₹8.21 per kWh, including fixed charges.</p>`)
+    + sec('Compliance calendar', comp.map(c => row({i:'clock', ti:c[0], s:c[1], r:pill(c[2]), go:c[3] && can(c[3]) ? c[3] : null})).join(''))
+    + sec('ESG', `<div class="stats">${esg.map(e => `<div class="stat"><b class="num">${e[0]}</b><span>${e[1]}</span></div>`).join('')}</div>`)
+    + `<section class="pad"><div class="stat"><b class="num">138</b><span>People through your gate on an average day this month</span></div><button class="btn wide mt" data-act="toastMsg" data-p="Report emailed to rajiv@aroraprecision.in">${ic('mail')}Email this report as PDF</button></section>`;
+};
+
+/* ---------- sheets ---------- */
+const SH = {};
+SH.pay = p => {
+  const f = S.sf, ids = p.split(','), list = S.bills.filter(b => ids.includes(b.id)), amt = sum(list);
+  f.ids = ids; f.amt = amt; if (f.method === undefined) f.method = 'UPI';
+  f.needs = S.role === 'Accounts' && amt > S.limit;
+  return sheetHead(`Pay ${inr(amt)}`, 'Plot B-14, Arora Precision Components')
+    + list.map(b => `<div class="kv"><span>${b.name}, ${b.period}</span><b class="num">${inr(b.amt)}</b></div>`).join('')
+    + `<p class="lbl">Pay with</p>${chips('method', ['UPI', 'Net banking', 'NEFT or RTGS'])}`
+    + (f.needs ? `<p class="callout">Payments above ${inr(S.limit)} need the owner’s approval. Rajiv gets the request in the app and on WhatsApp.</p>` : '')
+    + `<button class="btn wide" data-act="confirmPay">${f.needs ? 'Send for approval' : `Pay ${inr(amt)}`}</button>`;
+};
+SH.notifs = () => sheetHead('Notifications') + S.notifs.map((n, i) => `<button class="row" data-act="openNotif" data-p="${i}"><span class="row-i">${n.read ? ic('bell') : fnd('solid')}</span><span class="row-t"><b>${n.t}</b><span>${n.at}${n.read ? '' : '. New'}</span></span></button>`).join('') + `<button class="btn ghost wide" data-act="readAll">Mark all as read</button>`;
+SH.park = () => sheetHead('Your parks', 'One login works across every LML park you own in.')
+  + row({i:fnd('solid'), ti:'LML Industrial Park, Jhirka Valley', s:'Plot B-14. You’re here', r:ic('check')})
+  + row({i:fnd('line'), ti:'LML World City, Gurugram', s:'Coming soon'})
+  + row({i:fnd('line'), ti:'LML Industrial Township, Karnal', s:'Coming soon'});
+SH.newTicket = () => {
+  const f = S.sf; if (f.cat === undefined) f.cat = 'Power'; if (f.pri === undefined) f.pri = 'Normal'; if (f.loc === undefined) f.loc = 'Plot B-14';
+  return sheetHead('Raise a request') + `<p class="lbl">What’s the issue?</p>${chips('cat', Object.keys(CATI))}${fld('desc', 'Describe it', {area:1, ph:'For example: no power to the east wall sockets since 9 am'})}${fld('loc', 'Where')}<p class="lbl">Priority</p>${chips('pri', ['Normal', 'Urgent'])}<button class="btn ghost wide" data-act="photo">${ic('camera')}${f.photo ? '1 photo attached. Tap to remove' : 'Add a photo'}</button><button class="btn wide" data-act="raise">Raise request</button>`;
+};
+SH.ticket = id => {
+  const x = S.tickets.find(z => z.id === id); if (!x) return sheetHead('Request not found');
+  const upto = ['Assigned', 'In progress', 'Resolved'].indexOf(x.st) + 1;
+  const steps = [['Raised', x.at], ['Assigned to ' + x.who, ''], ['In progress', ''], ['Resolved', x.st === 'Resolved' ? x.sla : '']];
+  return sheetHead(x.id, x.cat) + `<p class="h3">${esc(x.ti)}</p>` + steps.map((s, i) => ms(s[0], s[1], i <= upto ? 'solid' : 'line')).join('')
+    + (x.st === 'Resolved' ? `<p class="lbl">How was the fix?</p>${chips('rate', ['Good', 'Okay', 'Poor'])}<button class="btn wide" data-act="rate">Send rating</button>` : `<p class="note">SLA: ${x.sla}</p><button class="btn wide" data-act="escalate">Escalate to park manager</button>`);
+};
+SH.permit = id => {
+  const p = S.permits.find(z => z.id === id);
+  return sheetHead(esc(p.ti)) + `<div class="mt">${pill(p.st)}</div><p class="mt">${p.note}</p>`
+    + (p.st === 'Action needed' ? `<button class="btn wide" data-act="uploadPermit" data-p="${p.id}">${ic('doc')}${p.need}</button>` : p.st === 'Approved' ? `<button class="btn ghost wide" data-act="toastMsg" data-p="${esc(p.ti)} letter shared on WhatsApp">${ic('msg')}Share approval letter</button>` : '');
+};
+SH.newPermit = () => {
+  const f = S.sf; if (f.type === undefined) f.type = 'Fit-out';
+  return sheetHead('Apply for a permission') + `<p class="lbl">Type</p>${chips('type', PERMIT_TYPES)}<div class="two">${fld('from', 'From', {type:'date'})}${fld('to', 'To', {type:'date'})}</div>${fld('det', 'Details', {area:1, ph:'Scope of work, contractor, vehicles or timings'})}<button class="btn wide" data-act="applyPermit">Submit application</button>`;
+};
+SH.newPass = () => {
+  const f = S.sf; if (f.purpose === undefined) f.purpose = 'Meeting'; if (f.when === undefined) f.when = 'Today';
+  return sheetHead('Create a visitor pass', 'The visitor gets a QR code on WhatsApp. Gate security sees it instantly.')
+    + fld('name', 'Visitor name', {ph:'Full name'}) + fld('phone', 'Mobile number', {type:'tel', ph:'+91'})
+    + `<p class="lbl">Purpose</p>${chips('purpose', ['Meeting', 'Delivery', 'Contractor', 'Audit', 'Interview'])}<p class="lbl">When</p>${chips('when', ['Today', 'Tomorrow', dl(DAYS[2])])}`
+    + fld('veh', 'Vehicle number (optional)', {ph:'HR 26 AB 1234'}) + `<button class="btn wide" data-act="createPass">Create pass</button>`;
+};
+SH.passQR = id => {
+  const p = S.passes.find(z => z.id === id);
+  return sheetHead('Visitor pass') + `<div class="qr-wrap">${qr(p.id + p.name)}</div><div class="kv"><span>Visitor</span><b>${esc(p.name)}</b></div><div class="kv"><span>Purpose</span><b>${esc(p.purpose)}</b></div><div class="kv"><span>When</span><b>${esc(p.when)}</b></div>${p.veh ? `<div class="kv"><span>Vehicle</span><b>${esc(p.veh)}</b></div>` : ''}<div class="kv"><span>Host</span><b>Arora Precision, Plot B-14</b></div><button class="btn wide" data-act="toastMsg" data-p="Pass sent to ${esc(p.name)} on WhatsApp">${ic('msg')}Share on WhatsApp</button>`;
+};
+SH.truck = () => {
+  const f = S.sf; if (f.day === undefined) f.day = dl(DAYS[0]); if (f.slot === undefined) f.slot = '08:00 to 10:00'; if (f.size === undefined) f.size = '10 to 25 tonne';
+  const slots = [{v:'06:00 to 08:00'}, {v:'08:00 to 10:00'}, {v:'10:00 to 12:00', l:'10:00 to 12:00, full', off:true}, {v:'14:00 to 16:00'}, {v:'16:00 to 18:00'}];
+  return sheetHead('Book a truck slot', 'Slots keep Gate 1 clear and your loading bay ready.')
+    + `<p class="lbl">Date</p>${chips('day', DAYS.slice(0, 4).map(dl))}<p class="lbl">Slot</p>${chips('slot', slots)}<p class="lbl">Truck size</p>${chips('size', ['Up to 10 tonne', '10 to 25 tonne', '25 to 40 tonne'])}`
+    + fld('veh', 'Vehicle number', {ph:'RJ 14 GC 7781'}) + fld('load', 'What’s it carrying?', {ph:'Steel coils'}) + `<button class="btn wide" data-act="bookTruck">Book slot</button>`;
+};
+SH.svcBook = p => {
+  const [c, i] = p.split('|'), x = SVC[c].list[+i], f = S.sf;
+  if (f.day === undefined) f.day = dl(DAYS[1]); if (f.slot === undefined) f.slot = '10:00 to 12:00'; if (f.where === undefined) f.where = 'Shop floor';
+  const gst = Math.round(x[2] * 0.18);
+  return sheetHead(x[0], x[1]) + `<div class="kv"><span>Price</span><b>${svcPrice(x)}</b></div><div class="kv"><span>GST, 18%</span><b>${inr(gst)}</b></div>`
+    + `<p class="lbl">Date</p>${chips('day', DAYS.slice(0, 5).map(dl))}<p class="lbl">Time</p>${chips('slot', ['08:00 to 10:00', '10:00 to 12:00', {v:'12:00 to 14:00', l:'12:00 to 14:00, full', off:true}, '14:00 to 16:00', '16:00 to 18:00'])}<p class="lbl">Where in your unit</p>${chips('where', ['Shop floor', 'Utility room', 'Office', 'Loading bay'])}`
+    + fld('note', 'What needs doing?', {area:1, ph:'For example, the compressor trips after 10 minutes'})
+    + `<button class="btn ghost wide" data-act="toastMsg" data-p="Photo added">${ic('camera')}Add a photo</button><p class="callout">Pay after the job, or add it to your monthly park bill. The work has a 30-day warranty.</p>`
+    + `<button class="btn wide" data-act="svcBook" data-p="${esc(p)}">Book now</button>`;
+};
+SH.svcQuote = p => {
+  const [c, i] = p.split('|'), x = SVC[c].list[+i];
+  return sheetHead(x[0], x[1]) + fld('note', 'Tell us what you need', {area:1, ph:'Type, quantity and when you need it'}) + `<p class="note">Three verified partners send quotes here within a working day.</p><button class="btn wide" data-act="svcQuote" data-p="${esc(x[0])}">Get quotes</button>`;
+};
+SH.svcDone = id => {
+  const b = S.svcB.find(z => z.id === id);
+  return sheetHead('Booked') + `<div class="card"><div class="svc-h"><span class="svc-av" aria-hidden="true">${esc(b.pro[0])}</span><span class="row-t"><b>${esc(b.pro)}</b><span>Rated ${b.rating} from ${b.jobs} jobs. ID and skills verified</span></span></div></div>`
+    + `<div class="kv"><span>Service</span><b>${esc(b.svc)}</b></div><div class="kv"><span>When</span><b>${esc(b.when)}</b></div><div class="kv"><span>Where</span><b>${esc(b.where)}, Plot B-14</b></div>`
+    + `<p class="callout">A gate pass for ${esc(b.pro)} is ready, so security lets them straight in.</p><div class="row-b mt"><button class="btn" data-act="toastMsg" data-p="Calling ${esc(b.pro)}">${ic('phone')}Call</button><button class="btn ghost" data-act="toastMsg" data-p="WhatsApp chat with ${esc(b.pro)} opened">${ic('msg')}WhatsApp</button></div>`;
+};
+SH.svcUrgent = () => {
+  const f = S.sf; if (f.what === undefined) f.what = 'Machine breakdown';
+  return sheetHead('Get help in 60 minutes', 'The nearest verified technician comes to your unit. A call-out fee of ₹1,000 applies, adjusted in the final bill.')
+    + `<p class="lbl">What’s wrong?</p>${chips('what', ['Machine breakdown', 'Power failure', 'Compressor down', 'Leak or flooding', 'Fire system fault'])}`
+    + fld('note', 'Anything the technician should know?', {area:1, ph:'Machine, model and what happened'}) + `<button class="btn wide" data-act="svcUrgent">${ic('bolt')}Send a technician now</button>`;
+};
+SH.svcRate = id => {
+  const b = S.svcB.find(z => z.id === id), f = S.sf; if (f.stars === undefined) f.stars = '5';
+  return sheetHead(`Rate ${esc(b.pro)}`, esc(b.svc)) + `<p class="lbl">Stars</p>${chips('stars', ['1', '2', '3', '4', '5'])}` + fld('note', 'Anything to add?', {area:1, ph:'Your review helps other park owners'}) + `<button class="btn wide" data-act="svcRate" data-p="${id}">Send rating</button>`;
+};
+SH.amc = p => {
+  const a = AMC[+p], f = S.sf; if (f.start === undefined) f.start = 'December';
+  return sheetHead(a[0], a[1]) + `<div class="kv"><span>Price</span><b>${a[2]}</b></div><div class="kv"><span>Visits</span><b>Priority, within 24 hours</b></div><div class="kv"><span>Certificates</span><b>Saved to your document vault</b></div><p class="lbl">Start in</p>${chips('start', ['December', 'January', 'February'])}<button class="btn wide" data-act="amc" data-p="${p}">Start plan</button>`;
+};
+SH.freqPass = () => {
+  const f = S.sf; if (f.days === undefined) f.days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; if (f.win === undefined) f.win = '08:00 to 18:00'; if (f.valid === undefined) f.valid = '1 month';
+  return sheetHead('Add a frequent pass', 'For contractors, vendors and drivers who come often. They get a 6-digit gate code.')
+    + fld('name', 'Name or company', {ph:'For example, Ravi Electricals'}) + fld('phone', 'Mobile number', {type:'tel', ph:'+91'})
+    + `<p class="lbl">Days</p>${chips('days', ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], {m:1})}<p class="lbl">Hours</p>${chips('win', ['06:00 to 14:00', '08:00 to 18:00', '14:00 to 22:00', 'All day'])}<p class="lbl">Valid for</p>${chips('valid', ['1 week', '1 month', '3 months'])}`
+    + `<button class="btn wide" data-act="freqPass">Create frequent pass</button>`;
+};
+SH.groupPass = () => {
+  const f = S.sf; if (f.day === undefined) f.day = dl(DAYS[3]); if (f.size === undefined) f.size = '6 to 10'; if (f.venue === undefined) f.venue = 'Chambers boardroom';
+  return sheetHead('Create a group pass', 'One link for every guest at a buyer visit, audit or event. Each guest gets their own QR code.')
+    + fld('name', 'What’s it for?', {ph:'For example, buyer delegation from Dubai'})
+    + `<p class="lbl">Date</p>${chips('day', DAYS.slice(0, 5).map(dl))}<p class="lbl">Guests</p>${chips('size', ['Up to 5', '6 to 10', '11 to 25', '26 to 50'])}<p class="lbl">Where</p>${chips('venue', ['My unit, Plot B-14', 'Chambers boardroom', 'Chambers convention hall'])}`
+    + `<button class="btn wide" data-act="groupPass">Create group pass</button>`;
+};
+SH.blockPerson = () => sheetHead('Block a person or vehicle', 'The gate turns them away and tells you if they try again.')
+  + fld('name', 'Name, company or vehicle number', {ph:'For example, HR 26 AB 1234'}) + fld('why', 'Reason', {ph:'For example, unauthorised scrap pickup'})
+  + `<button class="btn wide" data-act="blockPerson">Block</button>`;
+SH.goodsPass = () => {
+  const f = S.sf; if (f.dir === undefined) f.dir = 'Outward'; if (f.kind === undefined) f.kind = 'Non-returnable';
+  return sheetHead('Create a goods pass', 'Security checks every load against its pass at the gate.')
+    + `<p class="lbl">Direction</p>${chips('dir', ['Inward', 'Outward'])}<p class="lbl">Type</p>${chips('kind', ['Returnable', 'Non-returnable'], {rr:1})}`
+    + fld('what', 'What’s moving?', {ph:'For example, 2 injection moulds for repair'}) + fld('veh', 'Vehicle number', {ph:'HR 55 AF 9081'})
+    + (f.kind === 'Returnable' ? `<p class="lbl">Due back</p>${chips('back', DAYS.slice(2, 7).map(dl))}` : '')
+    + `<button class="btn wide" data-act="goodsPass">Create goods pass</button>`;
+};
+SH.addWorker = () => {
+  const f = S.sf; if (f.org === undefined) f.org = 'Own staff'; if (f.shift === undefined) f.shift = 'General';
+  return sheetHead('Add a worker', 'They get a 6-digit gate code by SMS. Their ID is checked once at the gate office.')
+    + fld('name', 'Full name', {ph:'Full name'}) + fld('phone', 'Mobile number', {type:'tel', ph:'+91'})
+    + `<p class="lbl">Employed by</p>${chips('org', ['Own staff', 'Mewat Skills Co-op', 'ProStaff Services'])}<p class="lbl">Shift</p>${chips('shift', ['Shift A', 'General', 'Shift B'])}`
+    + `<button class="btn wide" data-act="addWorker">Add worker</button>`;
+};
+SH.addVehicle = () => {
+  const f = S.sf; if (f.type === undefined) f.type = 'Company car';
+  return sheetHead('Add a vehicle', 'Registered vehicles enter without a pass. Collect the windscreen sticker from the gate office.')
+    + fld('no', 'Vehicle number', {ph:'HR 26 AB 1234'}) + `<p class="lbl">Type</p>${chips('type', ['Company car', 'Dispatch tempo', 'Truck', 'Two-wheeler'])}`
+    + `<button class="btn wide" data-act="addVehicle">Add vehicle</button>`;
+};
+SH.icom = () => { const f = S.sf; if (f.icom === undefined) f.icom = S.icom; return sheetHead('Gate intercom number', 'If no one answers a gate approval in 60 seconds, the gate calls this number.') + fld('icom', 'Number to call', {type:'tel', ph:'+91'}) + `<button class="btn wide" data-act="saveIcom">Save</button>`; };
+SH.sos = () => sheetHead('Alert park security?', 'The response team and the gate control room get your location, Plot B-14, right away.') + `<button class="btn wide" data-act="sos">${ic('sos')}Alert security now</button><button class="btn ghost wide" data-act="closeSheet">Cancel</button>`;
+SH.siteVisit = () => {
+  const f = S.sf; if (f.day === undefined) f.day = dl(DAYS[0]); if (f.time === undefined) f.time = '11:00';
+  return sheetHead('Book a site visit', 'Your project manager walks you through the build.') + `<p class="lbl">Date</p>${chips('day', DAYS.slice(0, 5).map(dl))}<p class="lbl">Time</p>${chips('time', ['10:00', '11:00', '15:00', '16:00'])}<button class="btn wide" data-act="siteVisit">Book visit</button>`;
+};
+SH.doc = p => {
+  const [g, i] = p.split('-').map(Number), d = DOCS[g].items[i];
+  return sheetHead(d[0], d[1]) + `<div class="docprev">${ic('doc')}<span>PDF</span></div><div class="row-b mt"><button class="btn" data-act="toastMsg" data-p="${esc(d[0])} shared on WhatsApp">${ic('msg')}Share</button><button class="btn ghost" data-act="toastMsg" data-p="${esc(d[0])} emailed to rajiv@aroraprecision.in">${ic('mail')}Email to me</button></div>`;
+};
+SH.bdc = p => { const b = BDC[+p]; return sheetHead(b[0], b[1]) + `<p class="mt">${b[3]}</p><button class="btn wide" data-act="toastMsg" data-p="Request sent to the Business Development Centre">${b[4]}</button>`; };
+SH.cfcBook = k => {
+  const c = CFC[k], f = S.sf; if (f.day === undefined) f.day = dl(DAYS[0]); if (f.hrs === undefined) f.hrs = '4'; if (f.slot === undefined) f.slot = '09:00';
+  return sheetHead(c.n, c.s) + `<p class="lbl">Date</p>${chips('day', DAYS.slice(0, 5).map(dl))}<p class="lbl">Start</p>${chips('slot', ['09:00', '11:00', '14:00'])}<p class="lbl">Hours</p>${chips('hrs', [{v:'2', l:'2 hours'}, {v:'4', l:'4 hours'}, {v:'8', l:'Full day'}], {rr:1})}<div class="kv mt"><span>Added to your monthly bill</span><b class="num">${inr(+f.hrs * c.rate)}</b></div><button class="btn wide" data-act="bookCfc" data-p="${k}">Book facility</button>`;
+};
+SH.hotel = () => {
+  const f = S.sf; if (f.day === undefined) f.day = dl(DAYS[0]); if (f.nights === undefined) f.nights = '1'; if (f.rooms === undefined) f.rooms = '1';
+  return sheetHead('Hampton by Hilton', 'Inside the park. Billed to your monthly statement.') + fld('guest', 'Guest name', {ph:'Who’s staying?'}) + `<p class="lbl">Check-in</p>${chips('day', DAYS.slice(0, 4).map(dl))}<p class="lbl">Nights</p>${chips('nights', ['1', '2', '3', '4'])}<p class="lbl">Rooms</p>${chips('rooms', ['1', '2', '3', '4'])}<button class="btn wide" data-act="ecoSubmit" data-p="hotel">Request rooms</button>`;
+};
+SH.clinic = () => {
+  const f = S.sf; if (f.type === undefined) f.type = 'General physician'; if (f.slot === undefined) f.slot = 'Today, 16:30';
+  return sheetHead('Apollo Clinic', 'For your staff and workers, inside the park.') + fld('pat', 'Patient name', {ph:'Full name'}) + `<p class="lbl">Visit for</p>${chips('type', ['General physician', 'Physiotherapy', 'Health check-up'])}<p class="lbl">Time</p>${chips('slot', ['Today, 15:00', 'Today, 16:30', 'Tomorrow, 10:00', 'Tomorrow, 12:00'])}<button class="btn wide" data-act="ecoSubmit" data-p="clinic">Book appointment</button>`;
+};
+SH.food = () => {
+  const f = S.sf; if (f.outlet === undefined) f.outlet = 'Haldiram’s'; if (f.n === undefined) f.n = '20'; if (f.to === undefined) f.to = 'Gate 1'; if (f.time === undefined) f.time = '13:00';
+  return sheetHead('Food for your team', 'Delivered from the park’s outlets.') + `<p class="lbl">From</p>${chips('outlet', ['McDonald’s', 'KFC', 'Haldiram’s'])}<p class="lbl">For how many people?</p>${chips('n', ['10', '20', '40', '80'])}<p class="lbl">Deliver to</p>${chips('to', ['Gate 1', 'Plot B-14 canteen', 'LML Chambers'])}<p class="lbl">Time</p>${chips('time', ['12:30', '13:00', '13:30'])}<button class="btn wide" data-act="ecoSubmit" data-p="food">Place order</button>`;
+};
+SH.checkIn = () => {
+  const f = S.sf, open = S.quarters.rooms.filter(r => r.used < r.beds);
+  if (f.room === undefined && open.length) f.room = open[0].n;
+  if (f.when === undefined) f.when = 'Today';
+  return sheetHead('Check someone in', 'They get their room number and mess timings on WhatsApp.') + fld('who', 'Team member’s name', {ph:'Full name'})
+    + (open.length ? `<p class="lbl">Room</p>${chips('room', open.map(r => r.n))}` : `<p class="callout">Every bed is taken. Add beds to check someone in.</p>`)
+    + `<p class="lbl">From</p>${chips('when', ['Today', 'Tomorrow', dl(DAYS[2])])}<button class="btn wide" data-act="checkIn"${open.length ? '' : ' disabled'}>Check in</button>`;
+};
+SH.hostel = () => {
+  const f = S.sf; if (f.type === undefined) f.type = 'Labour hostel'; if (f.n === undefined) f.n = '10'; if (f.from === undefined) f.from = 'December';
+  return sheetHead('Add beds', 'At LML Staff Quarters, so shifts start on time.') + `<p class="lbl">Type</p>${chips('type', ['Labour hostel', 'Staff quarters'])}<p class="lbl">Beds</p>${chips('n', ['5', '10', '25', '50'])}<p class="lbl">From</p>${chips('from', ['December', 'January', 'February'])}<button class="btn wide" data-act="ecoSubmit" data-p="hostel">Request beds</button>`;
+};
+SH.vendors = c => sheetHead(esc(c), 'Verified by LML and rated by park owners.') + VENDORS[c].list.map(([n, r, j]) => `<div class="row"><span class="row-t"><b>${n}</b><span>Rated ${r} by ${j} park owners</span></span><button class="btn sm" data-act="quote" data-p="${esc(n)}">Request quote</button></div>`).join('');
+SH.fin = p => {
+  const x = FIN[+p], f = S.sf; if (f.amt === undefined) f.amt = x[2][1]; if (f.ten === undefined) f.ten = x[3][1];
+  return sheetHead(x[0], x[1]) + `<p class="lbl">Amount</p>${chips('amt', x[2])}<p class="lbl">Tenure</p>${chips('ten', x[3])}<p class="note">With your consent, your park payment history is shared with lenders to speed up approval.</p><button class="btn wide" data-act="finSubmit">Check eligibility</button>`;
+};
+SH.growForm = k => {
+  const f = S.sf, g = GROW.find(x => x[0] === k);
+  let b = '';
+  if (k === 'expand') { if (f.size === undefined) f.size = '1,000 sq yd'; b = `<p class="lbl">Plot size you need</p>${chips('size', ['500 sq yd', '1,000 sq yd', '2,000 sq yd', '1 acre or more'])}<p class="note">Owners get Phase 2 plans before public launch.</p>`; }
+  if (k === 'lease') { if (f.size === undefined) f.size = '10,000 sq ft'; if (f.from === undefined) f.from = 'Within 3 months'; b = `<p class="lbl">Factory size</p>${chips('size', ['5,000 sq ft', '10,000 sq ft', '25,000 sq ft or more'])}<p class="lbl">Move in</p>${chips('from', ['Within 3 months', '3 to 6 months', 'Later'])}`; }
+  if (k === 'refer') b = fld('rn', 'Their name', {ph:'Full name'}) + fld('rc', 'Company', {ph:'Company name'}) + fld('rp', 'Mobile number', {type:'tel', ph:'+91'});
+  if (k === 'list') { if (f.mode === undefined) f.mode = 'Lease out'; b = `<p class="lbl">I want to</p>${chips('mode', ['Lease out', 'Sell'])}` + fld('price', 'Expected price (optional)', {ph:'For example: ₹45 per sq ft a month'}); }
+  return sheetHead(g[2], g[3]) + (k === 'lease' ? `<div class="lk-wrap mt">${lockup('plug')}</div>` : '') + b + `<button class="btn wide" data-act="growSubmit" data-p="${k}">Send request</button>`;
+};
+SH.member = id => {
+  const m = S.team.find(z => z.id === id), f = S.sf; if (f.r === undefined) f.r = m.r;
+  const mods = ROLES[f.r].map(k => MODS[k][0]).join(', ');
+  return sheetHead(esc(m.n), esc(m.ph)) + (m.r === 'Owner' ? `<p class="mt">Owner. Full access to every module.</p>` : `<p class="lbl">Role</p>${chips('r', ['CXO', 'Accounts', 'Admin', 'Security'], {rr:1})}<p class="lbl">Can use</p><p>${mods}</p><button class="btn wide" data-act="saveMember" data-p="${m.id}">Save changes</button><button class="btn ghost wide" data-act="removeMember" data-p="${m.id}">Remove from team</button>`);
+};
+SH.addMember = () => {
+  const f = S.sf; if (f.r === undefined) f.r = 'Admin';
+  return sheetHead('Add a team member', 'They get an invite on WhatsApp.') + fld('n', 'Name', {ph:'Full name'}) + fld('ph', 'Mobile number', {type:'tel', ph:'+91'}) + `<p class="lbl">Role</p>${chips('r', ['CXO', 'Accounts', 'Admin', 'Security'])}<button class="btn wide" data-act="addMember">Send invite</button>`;
+};
+SH.waPreview = () => sheetHead('On WhatsApp', 'Your team gets alerts like these and can reply to act on them.') + `<div class="chat"><div class="bub"><b>LML One</b><p>Electricity bill for October is ready: ₹1,51,200, due 28 Nov. Reply PAY to pay by UPI.</p><small>08:00</small></div><div class="bub"><b>LML One</b><p>Visitor at Gate 1: Vikram Sethi, supplier audit. Reply ALLOW or DENY.</p><small>10:52</small></div><div class="bub"><b>LML One</b><p>Planned power shutdown on Sun 29 Nov, 10:00 to 13:00. Backup DG will run.</p><small>12:15</small></div></div>`;
+
+/* ---------- engine ---------- */
+let SHEET = null, tt;
+function toast(m) { const el = $('#toast'); el.textContent = m; el.classList.add('show'); clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 3000); }
+function notify(text, go) { S.notifs.unshift({t:text, at:'Just now', go}); }
+function title() {
+  if (S.view === 'chamberBook') return SPACES[S.param].n;
+  if (S.view === 'svcCat') return SVC[S.param].n;
+  if (S.view === 'menu') return t('Menu');
+  return MODS[S.view] ? MODS[S.view][0] : 'LML One';
+}
+function header() {
+  const unread = S.notifs.filter(n => !n.read).length;
+  const bell = `<button class="icon-btn" data-sheet="notifs" aria-label="Notifications${unread ? `, ${unread} new` : ''}">${ic('bell')}${unread ? `<span class="dot">${unread}</span>` : ''}</button>`;
+  if (S.view === 'home') return `<div class="brand">${LOGO}</div>${bell}`;
+  return `${S.stack.length ? `<button class="icon-btn back" data-act="back" aria-label="Back">${ic('back')}</button>` : ''}<h1 class="ttl">${esc(title())}</h1>${bell}`;
+}
+const NAVL = {bills:['Bills', 'receipt'], chambers:['Book', 'cal'], desk:['Requests', 'wrench'], gate:['Gate', 'shield'], dash:['Dashboard', 'chart'], permits:['Permits', 'permit']};
+function nav() {
+  const root = S.stack.length ? S.stack[0].v : S.view;
+  const items = [['home', 'Home', 'home'], ...Object.keys(NAVL).filter(can).slice(0, 3).map(k => [k, NAVL[k][0], NAVL[k][1]]), ['menu', 'Menu', 'grid']];
+  return `<div class="nav-in">` + items.map(([k, l, i]) => `<button data-go="${k}" data-root="1" class="${root === k ? 'on' : ''}"${root === k ? ' aria-current="page"' : ''}>${ic(i)}<span>${t(l)}</span></button>`).join('') + `</div>`;
+}
+function render(keep) {
+  const y = window.scrollY;
+  F = S.vf;
+  $('#top').innerHTML = header();
+  $('#view').innerHTML = V[S.view]();
+  $('#nav').innerHTML = nav();
+  document.title = S.view === 'home' ? 'LML One' : `${title()} | LML One`;
+  if (keep) window.scrollTo(0, y);
+}
+function go(v, p, root) {
+  if (!can(v)) { toast('Your role doesn’t include this. Ask the owner for access.'); return; }
+  if (root) S.stack = []; else S.stack.push({v:S.view, p:S.param, y:window.scrollY, f:S.vf});
+  S.view = v; S.param = p == null ? null : p; S.vf = {};
+  render(); window.scrollTo(0, 0);
+}
+function back() {
+  const s = S.stack.pop();
+  if (!s) { go('home', null, true); return; }
+  S.view = s.v; S.param = s.p; S.vf = s.f || {};
+  render(); window.scrollTo(0, s.y || 0);
+}
+function sheetHTML() { F = S.sf; return SH[SHEET.name](SHEET.p); }
+function openSheet(name, p) {
+  S.sf = {}; SHEET = {name, p};
+  const sh = $('#sheet'), sc = $('#scrim');
+  sh.innerHTML = sheetHTML(); sh.scrollTop = 0;
+  if (sc.hidden) { sc.hidden = false; void sc.offsetWidth; sc.classList.add('open'); document.body.classList.add('lock'); }
+  sh.focus({preventScroll:true});
+}
+function reSheet() { if (!SHEET) return; const sh = $('#sheet'), y = sh.scrollTop; sh.innerHTML = sheetHTML(); sh.scrollTop = y; }
+function closeSheet() {
+  const sc = $('#scrim'); if (sc.hidden) return;
+  SHEET = null; sc.classList.remove('open'); document.body.classList.remove('lock');
+  setTimeout(() => { if (!SHEET) sc.hidden = true; }, 220);
+}
+function payBills(ids) {
+  S.bills.forEach(b => { if (ids.includes(b.id) && b.st === 'due') { b.st = 'paid'; S.paid.unshift({name:b.name, period:b.period, amt:b.amt, date:'22 Nov'}); } });
+  S.approvals = S.approvals.filter(a => !a.ids.some(i => ids.includes(i)));
+}
+
+/* ---------- actions ---------- */
+const A = {
+  back: () => back(),
+  closeSheet: () => closeSheet(),
+  toastMsg: (el, p) => { closeSheet(); toast(p); },
+  chip(el) {
+    const g = el.dataset.g, v = el.dataset.v, store = el.closest('#sheet') ? S.sf : S.vf;
+    if (el.dataset.m) {
+      const a = store[g] || (store[g] = []), i = a.indexOf(v);
+      if (i >= 0) a.splice(i, 1); else a.push(v);
+      el.classList.toggle('on', i < 0); el.setAttribute('aria-pressed', String(i < 0));
+    } else {
+      if (el.dataset.st) { if (g === 'limit') S.limit = +v || Infinity; else S[g] = v; } else store[g] = v;
+      el.parentElement.querySelectorAll('.chip').forEach(c => { const on = c === el; c.classList.toggle('on', on); c.setAttribute('aria-pressed', String(on)); });
+    }
+    if (el.dataset.rr) { if (el.closest('#sheet')) reSheet(); else render(true); }
+    if (g === 'role') toast(`Viewing as ${v}`);
+  },
+  toggle(el, k) {
+    S[k] = !S[k]; render(true);
+    if (k === 'autopay') toast(S.autopay ? 'Autopay on. Bills pay on their due date.' : 'Autopay off');
+  },
+  payAll() { const ids = S.bills.filter(b => b.st === 'due').map(b => b.id); if (ids.length) openSheet('pay', ids.join(',')); },
+  payOne: (el, p) => openSheet('pay', p),
+  confirmPay() {
+    const f = S.sf, ids = f.ids, amt = f.amt, method = f.method;
+    closeSheet();
+    if (f.needs) {
+      if (ids.some(inAppr)) { toast('Already waiting for the owner’s approval.'); return; }
+      const names = S.bills.filter(b => ids.includes(b.id)).map(b => b.name).join(', ');
+      S.approvals.push({id:'a' + Date.now(), ids, by:'Sunil Yadav', label:names, amt});
+      notify(`Sunil Yadav asked to pay ${inr(amt)}`, 'team');
+      render(true); toast('Sent to Rajiv for approval.'); return;
+    }
+    payBills(ids); render(true); toast(`Paid ${inr(amt)} by ${method}. GST invoice sent to accounts.`);
+  },
+  approve(el, p) { const a = S.approvals.find(x => x.id === p); if (!a) return; payBills(a.ids); render(true); toast(`Approved. ${inr(a.amt)} paid and Sunil has been told.`); },
+  decline(el, p) { S.approvals = S.approvals.filter(x => x.id !== p); render(true); toast('Declined. Sunil has been told.'); },
+  invoice: (el, p) => toast(`GST invoice for ${p} emailed to accounts@aroraprecision.in`),
+  photo() { S.sf.photo = !S.sf.photo; reSheet(); },
+  raise() {
+    const f = S.sf, d = (f.desc || '').trim();
+    if (!d) { toast('Describe the issue so the right team can fix it.'); return; }
+    const id = 'T-' + (S.tseq++), who = TEAM_FOR[f.cat];
+    S.tickets.unshift({id, cat:f.cat, ti:d.length > 70 ? d.slice(0, 68) + '…' : d, st:'Assigned', sla:f.pri === 'Urgent' ? '4h left' : '24h left', who, at:'Just now'});
+    closeSheet();
+    if (S.view !== 'desk' && can('desk')) go('desk'); else render(true);
+    toast(`Request ${id} raised. ${who} is on it.`);
+  },
+  escalate() { closeSheet(); toast('Escalated. The park manager will call you shortly.'); },
+  rate() { closeSheet(); toast('Thanks. Your rating goes to the park team.'); },
+  uploadPermit(el, p) {
+    const x = S.permits.find(z => z.id === p);
+    x.st = 'In review'; x.s = 'Drawing uploaded today. In review'; x.note = 'Your fire layout drawing is in. LML’s compliance desk is filing your application with the fire department.';
+    closeSheet(); render(true); toast('Uploaded. Your Fire NOC is now in review.');
+  },
+  applyPermit() {
+    const f = S.sf, dates = f.from && f.to ? `${fmtD(f.from)} to ${fmtD(f.to)}. ` : f.from ? `From ${fmtD(f.from)}. ` : '';
+    S.permits.unshift({id:'p' + Date.now(), ti:f.type, st:'Submitted', s:`${dates}Submitted today`, note:'The estate office reviews new applications within 2 working days. You’ll hear back here and on WhatsApp.'});
+    closeSheet(); render(true); toast('Application submitted. You’ll hear back within 2 working days.');
+  },
+  createPass() {
+    const f = S.sf, n = (f.name || '').trim();
+    if (!n) { toast('Add the visitor’s name to create the pass.'); return; }
+    const id = 'g' + Date.now();
+    S.passes.unshift({id, name:n, purpose:f.purpose, when:f.when, veh:(f.veh || '').trim().toUpperCase()});
+    render(true); openSheet('passQR', id);
+  },
+  bookTruck() {
+    const f = S.sf, v = (f.veh || '').trim();
+    if (!v) { toast('Add the vehicle number so the gate can let it in.'); return; }
+    S.trucks.unshift({when:`${f.day}, ${f.slot}`, size:f.size, veh:v.toUpperCase(), load:(f.load || '').trim()});
+    closeSheet(); render(true); toast(`Truck slot booked for ${f.day}, ${f.slot}.`);
+  },
+  svcBook(el, p) {
+    const [c, i] = p.split('|'), x = SVC[c].list[+i], f = S.sf, pro = PROS[Math.floor(Math.random() * PROS.length)], id = 's' + Date.now();
+    const b = {id, svc:x[0], pro:pro[0], rating:pro[1], jobs:pro[2], when:`${f.day}, ${f.slot}`, where:f.where, st:'Confirmed'};
+    S.svcB.unshift(b);
+    S.passes.unshift({id:'g' + Date.now(), name:pro[0], purpose:'Service', when:`${f.day}, ${f.slot}`, veh:''});
+    render(true); openSheet('svcDone', id);
+  },
+  svcQuote(el, p) { closeSheet(); toast(`Quote request sent for ${p}. Three partners reply within a working day.`); },
+  svcUrgent() {
+    const f = S.sf, pro = PROS[Math.floor(Math.random() * PROS.length)], id = 's' + Date.now();
+    S.svcB.unshift({id, svc:f.what, pro:pro[0], rating:pro[1], jobs:pro[2], when:'Today, within 60 minutes', where:'Shop floor', st:'On the way'});
+    S.passes.unshift({id:'g' + Date.now(), name:pro[0], purpose:'Urgent service', when:'Today, now', veh:''});
+    render(true); openSheet('svcDone', id); toast(`${pro[0]} is on the way. Gate security has their pass.`);
+  },
+  svcRate(el, p) { const b = S.svcB.find(z => z.id === p); if (b) b.rated = true; closeSheet(); render(true); toast('Thanks. Your rating helps other park owners choose.'); },
+  amc(el, p) { const f = S.sf; closeSheet(); toast(`${AMC[+p][0]} starts in ${f.start}. The LML services desk will call you to schedule the first visit.`); },
+  gApprove(el, p) {
+    const w = S.waiting.find(x => x.id === p); if (!w) return;
+    S.waiting = S.waiting.filter(x => x !== w);
+    S.inside.unshift({id:'i' + Date.now(), name:w.name, s:`${w.type}. In since ${hm()} at ${w.gate}`});
+    S.glog.unshift([hm(), `${w.name} entered at ${w.gate}`, 'Approved by you']);
+    render(true); toast(`${w.name} can go in. Security at ${w.gate} has been told.`);
+  },
+  gDeny(el, p) {
+    const w = S.waiting.find(x => x.id === p); if (!w) return;
+    S.waiting = S.waiting.filter(x => x !== w);
+    S.glog.unshift([hm(), `${w.name} turned away at ${w.gate}`, 'Denied']);
+    render(true); toast(`${w.name} has been turned away.`);
+  },
+  gLeave(el, p) {
+    const w = S.waiting.find(x => x.id === p); if (!w) return;
+    S.waiting = S.waiting.filter(x => x !== w);
+    S.parcels.unshift({id:'k' + Date.now(), from:w.name, s:`${w.why}. Left at the security desk at ${hm()}`});
+    S.glog.unshift([hm(), `${w.name} left parcels at the security desk`, 'Delivery']);
+    render(true); toast('Left at the security desk. Collect it any time, or have it sent to your unit.');
+  },
+  gOut(el, p) {
+    const x = S.inside.find(z => z.id === p); if (!x) return;
+    S.inside = S.inside.filter(z => z !== x);
+    S.glog.unshift([hm(), `${x.name} checked out`, 'Checked out']);
+    render(true); toast(`${x.name} is checked out. Gate security has been told.`);
+  },
+  gParcel(el, p) { S.parcels = S.parcels.filter(k => k.id !== p); render(true); toast('A gate runner is bringing it to your unit.'); },
+  freqPass() {
+    const f = S.sf, n = (f.name || '').trim();
+    if (!n) { toast('Add a name or company for the pass.'); return; }
+    if (!(f.days || []).length) { toast('Pick at least one day.'); return; }
+    const code = String(100000 + Math.floor(Math.random() * 900000)).replace(/(\d{3})(\d{3})/, '$1 $2');
+    const days = f.days.length === 7 ? 'Every day' : f.days.join(', ');
+    S.frequent.unshift({id:'f' + Date.now(), name:n, s:`${days}, ${f.win}. Valid for ${f.valid}`, code});
+    closeSheet(); render(true); toast(`Frequent pass created. Gate code ${code} sent to ${n} on WhatsApp.`);
+  },
+  groupPass() {
+    const f = S.sf, n = (f.name || '').trim();
+    if (!n) { toast('Say what the group pass is for.'); return; }
+    S.groups.unshift({id:'gp' + Date.now(), name:n, s:`${f.day}. ${f.size} guests. ${f.venue}`});
+    S.glog.unshift([hm(), `Group pass created: ${n}`, 'Group pass']);
+    closeSheet(); render(true); toast('Group pass created. Share one link and each guest gets their own QR code.');
+  },
+  blockPerson() {
+    const f = S.sf, n = (f.name || '').trim();
+    if (!n) { toast('Add the name or vehicle number to block.'); return; }
+    S.blocked.unshift({id:'b' + Date.now(), name:n, s:`Blocked today${(f.why || '').trim() ? '. ' + f.why.trim() : ''}`});
+    closeSheet(); render(true); toast(`${n} is blocked at every gate.`);
+  },
+  goodsPass() {
+    const f = S.sf, w = (f.what || '').trim();
+    if (!w) { toast('Say what’s moving so security can check the load.'); return; }
+    const back = f.kind === 'Returnable' && f.back ? `, due back ${f.back}` : '';
+    S.goods.unshift({id:'m' + Date.now(), ti:w, s:`${f.dir}, ${f.kind.toLowerCase()}${back}${(f.veh || '').trim() ? '. ' + f.veh.trim().toUpperCase() : ''}`, st:'Expected'});
+    closeSheet(); render(true); toast('Goods pass created. Security checks the load against it at the gate.');
+  },
+  addWorker() {
+    const f = S.sf, n = (f.name || '').trim();
+    if (!n) { toast('Add the worker’s name.'); return; }
+    closeSheet(); render(true); toast(`${n} is added to ${f.shift}. Their gate code is on its way by SMS.`);
+  },
+  addVehicle() {
+    const f = S.sf, n = (f.no || '').trim().toUpperCase();
+    if (!n) { toast('Add the vehicle number.'); return; }
+    S.vehicles.unshift({id:'v' + Date.now(), no:n, s:`${f.type}. Sticker ready at the gate office`});
+    closeSheet(); render(true); toast(`${n} is registered. Collect the sticker from the gate office.`);
+  },
+  saveIcom() { const v = (S.sf.icom || '').trim(); if (!v) { toast('Add a number for the gate to call.'); return; } S.icom = v; closeSheet(); render(true); toast('Gate intercom number saved.'); },
+  sos() { closeSheet(); notify('SOS sent to park security from Plot B-14', 'gate'); render(true); toast('Security alerted. The response team is on its way to Plot B-14.'); },
+  emergency: () => toast('Apollo Clinic alerted. An ambulance is on its way to Plot B-14.'),
+  siteVisit() { const f = S.sf; closeSheet(); toast(`Site visit booked for ${f.day}, ${f.time}.`); },
+  bookChamber() {
+    const sp = SPACES[S.param], c = S.calc;
+    if (!c || !c.ok) return;
+    S.bookings.unshift({id:'c' + Date.now(), sp:S.param, when:c.when, free:c.free, add:(S.vf.add || []).slice(), req:sp.unit !== 'hr'});
+    S.credits -= c.free;
+    back();
+    toast(sp.unit === 'hr' ? `Booked: ${sp.n}, ${c.when}.` : 'Request sent. The events team will call you today.');
+  },
+  cancelBooking(el, p) {
+    const b = S.bookings.find(x => x.id === p); if (!b) return;
+    S.credits += b.free; S.bookings = S.bookings.filter(x => x.id !== p);
+    render(true); toast(b.free ? 'Booking cancelled. Your free hours are back.' : 'Booking cancelled.');
+  },
+  bookCfc(el, k) {
+    const c = CFC[k], f = S.sf, cost = +f.hrs * c.rate;
+    S.cfcB.unshift({ti:c.n, s:`${f.day}, from ${f.slot}, ${f.hrs === '8' ? 'full day' : f.hrs + ' hours'}`});
+    closeSheet(); render(true); toast(`Booked. ${inr(cost)} goes on your monthly bill.`);
+  },
+  checkIn() {
+    const f = S.sf, n = (f.who || '').trim(), r = S.quarters.rooms.find(x => x.n === f.room);
+    if (!n) { toast('Add the team member’s name to check them in.'); return; }
+    if (!r || r.used >= r.beds) { toast('Pick a room with a free bed.'); return; }
+    r.used++; S.quarters.log.unshift({ti:`${n} checked in`, s:`${r.n}. From ${f.when}`});
+    closeSheet(); render(true); toast(`${n} is checked in to ${r.n}.`);
+  },
+  ecoSubmit(el, p) {
+    const f = S.sf; let it;
+    if (p === 'hotel') {
+      const g = (f.guest || '').trim(); if (!g) { toast('Add the guest’s name to request rooms.'); return; }
+      it = {i:'hotel', ti:`Hampton by Hilton for ${g}`, s:`${f.rooms} ${f.rooms === '1' ? 'room' : 'rooms'} from ${f.day}, ${f.nights} ${f.nights === '1' ? 'night' : 'nights'}`, st:'Requested', m:'Rooms requested. Confirmation comes on WhatsApp.'};
+    } else if (p === 'clinic') {
+      const n = (f.pat || '').trim(); if (!n) { toast('Add the patient’s name to book.'); return; }
+      it = {i:'health', ti:`Apollo Clinic for ${n}`, s:`${f.type}, ${f.slot}`, st:'Confirmed', m:'Appointment confirmed.'};
+    } else if (p === 'food') {
+      it = {i:'food', ti:`${f.outlet} for ${f.n} people`, s:`To ${f.to} at ${f.time}`, st:'Ordered', m:'Order placed. It goes on your monthly bill.'};
+    } else {
+      it = {i:'bed', ti:`${f.n} more beds in the ${f.type.toLowerCase()}`, s:`From ${f.from}`, st:'Requested', m:'Request sent to the LML Staff Quarters desk.'};
+    }
+    S.eco.unshift(it); closeSheet(); render(true); toast(it.m);
+  },
+  quote(el, p) { el.textContent = 'Requested'; el.disabled = true; toast(`Quote requested from ${p}. Replies come to your inbox here.`); },
+  finSubmit() { const f = S.sf; closeSheet(); toast(`Request for ${f.amt} sent to partner lenders. An LML finance manager will call you within a day.`); },
+  connect(el, p) { el.textContent = 'Sent'; el.disabled = true; toast(`Intro request sent to ${p}.`); },
+  growSubmit(el, k) {
+    const f = S.sf;
+    if (k === 'refer' && !(f.rn || '').trim()) { toast('Add their name so we know who to reach.'); return; }
+    const m = {expand:'Request sent. Phase 2 plans reach you before launch.', lease:'Request sent. The allocation team will share factories that fit.', refer:`Thanks. We’ll reach out to ${(f.rn || '').trim()}. You earn maintenance credit if they join.`, list:'Request sent. LML’s resale desk will call you.'};
+    closeSheet(); toast(m[k]);
+  },
+  rsvp(el, p) { S.rsvp[p] = !S.rsvp[p]; render(true); toast(S.rsvp[p] ? 'Done. You’re on the list.' : 'RSVP withdrawn.'); },
+  saveMember(el, p) { const m = S.team.find(z => z.id === p); m.r = S.sf.r; closeSheet(); render(true); toast(`${m.n} is now ${m.r}.`); },
+  removeMember(el, p) { const m = S.team.find(z => z.id === p); S.team = S.team.filter(z => z.id !== p); closeSheet(); render(true); toast(`${m.n} removed from the team.`); },
+  addMember() {
+    const f = S.sf, n = (f.n || '').trim();
+    if (!n) { toast('Add their name to send the invite.'); return; }
+    S.team.push({id:'m' + Date.now(), n, r:f.r, ph:(f.ph || '').trim()});
+    closeSheet(); render(true); toast(`Invite sent to ${n} on WhatsApp.`);
+  },
+  uploadSubsidy(el, p) {
+    const c = S.subsidy.find(z => z.id === p); c.st = 'Filed'; c.s = 'Documents uploaded today. Filed with the department';
+    render(true); toast('Uploaded. Your subsidy manager files it next.');
+  },
+  readAll() { S.notifs.forEach(n => { n.read = true; }); render(true); reSheet(); },
+  openNotif(el, p) {
+    const n = S.notifs[+p]; n.read = true; closeSheet();
+    if (can(n.go)) go(n.go); else { render(true); toast('Your role doesn’t include this. Ask the owner for access.'); }
+  }
+};
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const sc = $('#scrim');
+  if (e.target === sc) { closeSheet(); return; }
+  const el = e.target.closest('[data-go],[data-act],[data-sheet]');
+  if (!el || el.disabled) return;
+  const p = el.dataset.p;
+  if (el.dataset.go) { closeSheet(); go(el.dataset.go, p, el.dataset.root === '1'); }
+  else if (el.dataset.sheet) openSheet(el.dataset.sheet, p);
+  else if (A[el.dataset.act]) A[el.dataset.act](el, p);
+});
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (!el.dataset || !el.dataset.f) return;
+  (el.closest('#sheet') ? S.sf : S.vf)[el.dataset.f] = el.value;
+  if (el.dataset.live === 'dir') $('#dirlist').innerHTML = dirList();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && SHEET) closeSheet(); });
+
+render();
+})();
+</script>
+</body>
+</html>
